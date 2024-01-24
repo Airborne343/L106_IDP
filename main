@@ -35,8 +35,7 @@ int enl=5;
 int motorspeed=150; //0-255
 int vspeed=100;    
 int tspeed=255;
-int tdelay=20;
-int c =0;       // count for the button ON OFF
+int tdelay=20;     
 int count = 0; //count the numbers of turn
 
 void setup() {
@@ -56,25 +55,25 @@ void setup() {
   delay(5000);
   int val = digitalRead(buttonPin); // read input value
   Serial.println(val);
+  Serial.println(linetrack);
+  Serial.println(BACKWARD);
+  Serial.println(FORWARD);
 }
 
 void loop() {
   // put your main code here, to run repeatedly
   int val = digitalRead(buttonPin); // read input value
-  Serial.println(linetrack);
-  if (val==HIGH && c==0){
+  LeftMotor->setSpeed(150);
+  RightMotor->setSpeed(150);
+  if (val==HIGH){
     Serial.print("ON");
     initialise();
     Serial.println("RUN");
-    c++;
   }
-  if (val==HIGH && c==1){
-    stop();
-    Serial.println("OFF");
-    linetrack = false;
-  }
-  while (linetrack = true){
+ 
+  while (linetrack==1){
     Serial.println("WHILE");
+    delay(1000);
     linetracking();
     }
   
@@ -96,7 +95,7 @@ void initialise(){
 
 void time_delay(){
   unsigned long previousMillis = 0; //store time for second event
-  const long interval = 2000; //interval for second event
+  const long interval = 500; //interval for second event
   unsigned long currentMillis = millis(); //conditional that checks whether 2 seconds have passed since last event
   if (currentMillis - previousMillis >= interval) {
     previousMillis = millis();
@@ -163,25 +162,32 @@ void backward()
 
 void right() 
  {
-  LeftMotor->setSpeed(150);
+  LeftMotor->setSpeed(200);
   LeftMotor->run(FORWARD);
-  RightMotor->run(RELEASE);
+  RightMotor->setSpeed(100);
+  RightMotor->run(FORWARD);
   delay(500);
- } 
+  }
 
 void right90() //turn 90 degrees
  {
+  //unsigned long current_time = millis(); 
+  // Serial.println(current_time);
+  // int interval = 2000;
+  // while((millis()-current_time) < interval){
+  // Serial.println(millis());
   LeftMotor->run(FORWARD);
   RightMotor->run(BACKWARD);
-  time_delay();
+  //time_delay();
  } 
 
 void left() 
  {
-  RightMotor->setSpeed(150);
-  LeftMotor->run(RELEASE);
+  RightMotor->setSpeed(200);
   RightMotor->run(FORWARD);
-  delay(500);
+  LeftMotor->setSpeed(100);
+  LeftMotor->run(FORWARD);
+  delay(500); 
 }  
 
 void left90() //turn 90 degrees
