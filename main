@@ -1,0 +1,202 @@
+// On button
+// Move forward
+// Line tracking
+// If detect both line at once,
+// Turn left
+// Line tracking while right sensor detecting,
+// If right sensor detects,
+// Turn right
+// Move forward until box is detected with ultrasonic sensor
+// The first forward movement from the box
+
+
+
+#include <Adafruit_MotorShield.h>
+
+// Create the motor shield object with the default I2C address
+Adafruit_MotorShield AFMS = Adafruit_MotorShield();
+// Select which 'port' M1, M2, M3 or M4. In this case, M1
+Adafruit_DCMotor *LeftMotor = AFMS.getMotor(1);
+Adafruit_DCMotor *RightMotor = AFMS.getMotor(4);
+
+bool linetrack = false;
+int buttonPin = 4;
+int sr=6;   //sensor right
+int sl=7;  //sensor left
+int ssr=8;   //outer sensor right
+int ssl=9;   //outer sensor left
+int svr=0; //sensor value right
+int svl=0; //sensor value left
+int svvr=0; //outer sensor value right
+int svvl=0; //outer sensor value left
+int led=13;
+int enr=3; 
+int enl=5;
+int motorspeed=150; //0-255
+int vspeed=100;    
+int tspeed=255;
+int tdelay=20;
+int c =0;
+
+void setup() {
+  // put your setup code here, to run once:
+  if (!AFMS.begin()) {         // create with the default frequency 1.6KHz
+  // if (!AFMS.begin(1000)) {  // OR with a different frequency, say 1KHz
+    Serial.println("Could not find Motor Shield. Check wiring.");
+    while (1);
+  }
+  Serial.begin(9600);           // set up Serial library at 9600 bps
+  Serial.println("Setup");
+  pinMode(buttonPin, INPUT); 
+  pinMode(sr,INPUT);
+  pinMode(sl,INPUT);
+  LeftMotor->setSpeed(motorspeed);
+  RightMotor->setSpeed(motorspeed);
+  delay(5000);
+  int val = digitalRead(buttonPin); // read input value
+  Serial.println(val);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly
+  int val = digitalRead(buttonPin); // read input value
+  Serial.println(linetrack);
+  if (val==HIGH && c==0){
+    Serial.print("ON");
+    initialise();
+    Serial.println("RUN");
+    c++;
+  }
+  if (val==HIGH && c==1){
+    stop();
+    Serial.println("OFF");
+    linetrack = false;
+  }
+  while (linetrack = true){
+    Serial.println("WHILE");
+    linetracking();
+    }
+  //turn_left();
+}
+
+//Universal function
+
+void initialise(){
+  //move forward for 2 seconds
+  Serial.println("INITIALISE");
+  LeftMotor->setSpeed(150);
+  LeftMotor->run(FORWARD);
+  RightMotor->setSpeed(150);
+  RightMotor->run(FORWARD);
+  delay(5000);
+  linetrack = true;
+  //need to add a release here? myMotor->run(RELEASE);
+}
+
+void turn_left(){
+  unsigned long previousMillis = 0; //store time for second event
+  const long interval = 2000; //interval for second event
+  svvr=digitalRead(ssr);
+  svvl=digitalRead(ssl);
+  
+  if(svvl==HIGH   && svvr==LOW)
+  {
+  left90(); 
+  }
+  unsigned long currentMillis = millis();
+
+   //conditional that checks whether 2 seconds have passed since last event
+   if (currentMillis - previousMillis >= interval) {
+    previousMillis = millis();
+    //execute a piece of code, every *2 seconds*
+   }
+
+}
+
+void turn_right(){
+  svvr=digitalRead(ssr);
+  svvl=digitalRead(ssl);
+  unsigned long previousMillis = 0; //store time for second event
+  if(svvl==LOW   && svvr==HIGH)
+  {
+  right90(); 
+  }
+  unsigned long currentMillis = millis();
+  const long interval = 2000; //interval for second event
+
+   //conditional that checks whether 2 seconds have passed since last event
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = millis();
+    //execute a piece of code, every *2 seconds*
+   }
+}
+void linetracking(){
+ //Serial.println("LINETRACKING");
+ svr=digitalRead(sr);
+ svl=digitalRead(sl);
+   
+  if(svl==LOW && svr==LOW)
+  {
+  forward(); 
+  }
+  if(svl==HIGH   && svr==LOW)
+  {
+  left(); 
+  }
+  if(svl==LOW && svr==HIGH)
+   { 
+  right(); 
+  }
+  if(svl==HIGH && svr==HIGH)
+   {
+  stop();
+  }
+}
+
+void forward()
+ {
+  //adjust the speed here if needed
+  LeftMotor->run(FORWARD);
+  RightMotor->run(FORWARD);
+ } 
+
+void backward()
+   {
+    LeftMotor->run(BACKWARD);
+    RightMotor->run(BACKWARD);
+   }
+
+void right() 
+ {
+  LeftMotor->setSpeed(150);
+  LeftMotor->run(FORWARD);
+  RightMotor->run(RELEASE);
+  delay(500);
+ } 
+
+void right90() //turn 90 degrees
+ {
+  LeftMotor->run(FORWARD);
+  RightMotor->run(BACKWARD);
+  delay(1000);
+ } 
+
+void left() 
+ {
+  RightMotor->setSpeed(150);
+  LeftMotor->run(RELEASE);
+  RightMotor->run(FORWARD);
+  delay(500);
+}  
+
+void left90() //turn 90 degrees
+ {
+  LeftMotor->run(BACKWARD);
+  RightMotor->run(FORWARD);
+  delay(1000);
+}  
+void stop()
+ {
+  LeftMotor->run(RELEASE);
+  RightMotor->run(RELEASE);
+ }
