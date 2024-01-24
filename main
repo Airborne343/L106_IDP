@@ -36,7 +36,8 @@ int motorspeed=150; //0-255
 int vspeed=100;    
 int tspeed=255;
 int tdelay=20;
-int c =0;
+int c =0;       // count for the button ON OFF
+int count = 0; //count the numbers of turn
 
 void setup() {
   // put your setup code here, to run once:
@@ -76,7 +77,7 @@ void loop() {
     Serial.println("WHILE");
     linetracking();
     }
-  //turn_left();
+  
 }
 
 //Universal function
@@ -93,42 +94,36 @@ void initialise(){
   //need to add a release here? myMotor->run(RELEASE);
 }
 
-void turn_left(){
+void time_delay(){
   unsigned long previousMillis = 0; //store time for second event
   const long interval = 2000; //interval for second event
-  svvr=digitalRead(ssr);
-  svvl=digitalRead(ssl);
-  
-  if(svvl==HIGH   && svvr==LOW)
-  {
-  left90(); 
-  }
-  unsigned long currentMillis = millis();
-
-   //conditional that checks whether 2 seconds have passed since last event
-   if (currentMillis - previousMillis >= interval) {
+  unsigned long currentMillis = millis(); //conditional that checks whether 2 seconds have passed since last event
+  if (currentMillis - previousMillis >= interval) {
     previousMillis = millis();
     //execute a piece of code, every *2 seconds*
    }
+}
+void turn_left(){
+  
+  svvr=digitalRead(ssr);
+  svvl=digitalRead(ssl);
+  
+  if(svvl==HIGH   && svvr==HIGH)
+  {
+  left90();
+  count++;
+  }
 
 }
 
 void turn_right(){
   svvr=digitalRead(ssr);
   svvl=digitalRead(ssl);
-  unsigned long previousMillis = 0; //store time for second event
   if(svvl==LOW   && svvr==HIGH)
   {
   right90(); 
   }
-  unsigned long currentMillis = millis();
-  const long interval = 2000; //interval for second event
 
-   //conditional that checks whether 2 seconds have passed since last event
-  if (currentMillis - previousMillis >= interval) {
-    previousMillis = millis();
-    //execute a piece of code, every *2 seconds*
-   }
 }
 void linetracking(){
  //Serial.println("LINETRACKING");
@@ -178,7 +173,7 @@ void right90() //turn 90 degrees
  {
   LeftMotor->run(FORWARD);
   RightMotor->run(BACKWARD);
-  delay(1000);
+  time_delay();
  } 
 
 void left() 
@@ -193,8 +188,9 @@ void left90() //turn 90 degrees
  {
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
-  delay(1000);
+  time_delay();
 }  
+
 void stop()
  {
   LeftMotor->run(RELEASE);
