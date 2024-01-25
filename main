@@ -76,7 +76,7 @@ void initialise(){
 
 void time_delay(){
   unsigned long previousMillis = 0; //store time for second event
-  const long interval = 500; //interval for second event
+  const long interval = 1000; //interval for second event
   unsigned long currentMillis = millis(); //conditional that checks whether 2 seconds have passed since last event
   if (currentMillis - previousMillis >= interval) {
     previousMillis = millis();
@@ -138,7 +138,7 @@ void right()
   LeftMotor->run(FORWARD);
   RightMotor->setSpeed(25);
   RightMotor->run(FORWARD);
-    Serial.println("RIGHT");
+  Serial.println("RIGHT");
   delay(tdelay);
   }
 
@@ -160,13 +160,17 @@ void right90() //turn 90 degrees
   // int interval = 2000;
   // while((millis()-current_time) < interval){
   // Serial.println(millis());
+  RightMotor->setSpeed(25);
+  LeftMotor->setSpeed(225);
   LeftMotor->run(FORWARD);
   RightMotor->run(BACKWARD);
-  //time_delay();
+  time_delay();
  } 
 
 void left90() //turn 90 degrees
  {
+  RightMotor->setSpeed(225);
+  LeftMotor->setSpeed(25);
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
   time_delay();
