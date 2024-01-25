@@ -93,6 +93,13 @@ void linetracking(){
   if(svl==LOW && svr==LOW)
   {
   stop(); 
+  delay(tdelay);
+  svvr=digitalRead(ssr);
+  svvl=digitalRead(ssl);
+  if (svvl==HIGH && svvr == HIGH)
+  {
+    counter();
+  }
   }
   else if(svl==HIGH   && svr==LOW)
   {
@@ -192,4 +199,17 @@ void turn_right(){
   right90(); 
   }
 
+}
+
+void counter(){
+  if (counter%2 == 0)
+  {
+    left90();
+    counter += 1
+  }
+  else if (counter%2 == 1)
+  {
+    right90();
+    counter += 1
+  }
 }
