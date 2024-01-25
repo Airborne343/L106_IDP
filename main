@@ -1,16 +1,3 @@
-// On button
-// Move forward
-// Line tracking
-// If detect both line at once,
-// Turn left
-// Line tracking while right sensor detecting,
-// If right sensor detects,
-// Turn right
-// Move forward until box is detected with ultrasonic sensor
-// The first forward movement from the box
-
-
-
 #include <Adafruit_MotorShield.h>
 
 // Create the motor shield object with the default I2C address
@@ -72,7 +59,6 @@ void loop() {
   }
  
   while (linetrack==1){
-    Serial.println("WHILE");
     delay(1000);
     linetracking();
     }
@@ -88,7 +74,7 @@ void initialise(){
   LeftMotor->run(FORWARD);
   RightMotor->setSpeed(150);
   RightMotor->run(FORWARD);
-  delay(5000);
+  delay(1000);
   linetrack = true;
   //need to add a release here? myMotor->run(RELEASE);
 }
@@ -133,15 +119,15 @@ void linetracking(){
   {
   forward(); 
   }
-  if(svl==HIGH   && svr==LOW)
+  elif(svl==HIGH   && svr==LOW)
   {
   left(); 
   }
-  if(svl==LOW && svr==HIGH)
+  elif(svl==LOW && svr==HIGH)
    { 
   right(); 
   }
-  if(svl==HIGH && svr==HIGH)
+  elif(svl==HIGH && svr==HIGH)
    {
   stop();
   }
@@ -152,21 +138,24 @@ void forward()
   //adjust the speed here if needed
   LeftMotor->run(FORWARD);
   RightMotor->run(FORWARD);
+  Serial.println("FORWRAD");
  } 
 
 void backward()
    {
     LeftMotor->run(BACKWARD);
     RightMotor->run(BACKWARD);
+      Serial.println("BACKWARD");
    }
 
 void right() 
  {
-  LeftMotor->setSpeed(200);
+  LeftMotor->setSpeed(170);
   LeftMotor->run(FORWARD);
-  RightMotor->setSpeed(100);
+  RightMotor->setSpeed(125);
   RightMotor->run(FORWARD);
-  delay(500);
+    Serial.println("RIGHT");
+  delay(tdelay);
   }
 
 void right90() //turn 90 degrees
@@ -183,11 +172,12 @@ void right90() //turn 90 degrees
 
 void left() 
  {
-  RightMotor->setSpeed(200);
+  RightMotor->setSpeed(170);
   RightMotor->run(FORWARD);
-  LeftMotor->setSpeed(100);
+  LeftMotor->setSpeed(125);
   LeftMotor->run(FORWARD);
-  delay(500); 
+    Serial.println("LEFT");
+  delay(tdelay); 
 }  
 
 void left90() //turn 90 degrees
