@@ -3,13 +3,13 @@
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 // Select which 'port' M1, M2, M3 or M4. In this case, M1
-Adafruit_DCMotor *LeftMotor = AFMS.getMotor(1);
-Adafruit_DCMotor *RightMotor = AFMS.getMotor(4);
+Adafruit_DCMotor *LeftMotor = AFMS.getMotor(4);
+Adafruit_DCMotor *RightMotor = AFMS.getMotor(1);
 
 bool linetrack = false;
 int buttonPin = 4;
-int sr=6;   //sensor right
-int sl=7;  //sensor left
+int sl=6;   //sensor left
+int sr=7;  //sensor right
 int ssr=8;   //outer sensor right
 int ssl=9;   //outer sensor left
 int svr=0; //sensor value right
@@ -35,8 +35,8 @@ void setup() {
   Serial.begin(9600);           // set up Serial library at 9600 bps
   Serial.println("Setup");
   pinMode(buttonPin, INPUT); 
-  pinMode(sr,INPUT);
   pinMode(sl,INPUT);
+  pinMode(sr,INPUT);
   LeftMotor->setSpeed(motorspeed);
   RightMotor->setSpeed(motorspeed);
   delay(5000);
@@ -88,32 +88,12 @@ void time_delay(){
     //execute a piece of code, every *2 seconds*
    }
 }
-void turn_left(){
-  
-  svvr=digitalRead(ssr);
-  svvl=digitalRead(ssl);
-  
-  if(svvl==HIGH   && svvr==HIGH)
-  {
-  left90();
-  count++;
-  }
 
-}
 
-void turn_right(){
-  svvr=digitalRead(ssr);
-  svvl=digitalRead(ssl);
-  if(svvl==LOW   && svvr==HIGH)
-  {
-  right90(); 
-  }
-
-}
 void linetracking(){
  //Serial.println("LINETRACKING");
- svr=digitalRead(sr);
- svl=digitalRead(sl);
+ svr=digitalRead(sl);
+ svl=digitalRead(sr);
    
   if(svl==LOW && svr==LOW)
   {
@@ -158,6 +138,17 @@ void right()
   delay(tdelay);
   }
 
+
+void left() 
+ {
+  RightMotor->setSpeed(170);
+  RightMotor->run(FORWARD);
+  LeftMotor->setSpeed(125);
+  LeftMotor->run(FORWARD);
+    Serial.println("LEFT");
+  delay(tdelay); 
+}  
+
 void right90() //turn 90 degrees
  {
   //unsigned long current_time = millis(); 
@@ -169,16 +160,6 @@ void right90() //turn 90 degrees
   RightMotor->run(BACKWARD);
   //time_delay();
  } 
-
-void left() 
- {
-  RightMotor->setSpeed(170);
-  RightMotor->run(FORWARD);
-  LeftMotor->setSpeed(125);
-  LeftMotor->run(FORWARD);
-    Serial.println("LEFT");
-  delay(tdelay); 
-}  
 
 void left90() //turn 90 degrees
  {
@@ -192,3 +173,26 @@ void stop()
   LeftMotor->run(RELEASE);
   RightMotor->run(RELEASE);
  }
+
+ void turn_left(){
+  
+  svvr=digitalRead(ssr);
+  svvl=digitalRead(ssl);
+  
+  if(svvl==HIGH   && svvr==HIGH)
+  {
+  left90();
+  count++;
+  }
+
+}
+
+void turn_right(){
+  svvr=digitalRead(ssr);
+  svvl=digitalRead(ssl);
+  if(svvl==LOW   && svvr==HIGH)
+  {
+  right90(); 
+  }
+
+}
