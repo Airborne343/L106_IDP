@@ -155,7 +155,7 @@ void right90() //turn 90 degrees
   // Serial.println(millis());
   LeftMotor->run(FORWARD);
   RightMotor->run(BACKWARD);
-  //time_delay();
+  time_delay();
  } 
 
 void left90() //turn 90 degrees
