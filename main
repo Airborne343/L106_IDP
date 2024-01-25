@@ -23,7 +23,8 @@ int motorspeed=150; //0-255
 int vspeed=100;    
 int tspeed=255;
 int tdelay=2;     
-int count = 0; //count the numbers of turn
+int counter = 0; //count the numbers of turn
+
 
 void setup() {
   // put your setup code here, to run once:
@@ -89,18 +90,43 @@ void linetracking(){
  //Serial.println("LINETRACKING");
  svl=digitalRead(sl);
  svr=digitalRead(sr);
+svvr=digitalRead(ssr);
+svvl=digitalRead(ssl);
    
   if(svl==LOW && svr==LOW)
   {
   stop(); 
   delay(tdelay);
-  svvr=digitalRead(ssr);
-  svvl=digitalRead(ssl);
-  if (svvl==HIGH && svvr == HIGH)
+  }
+
+  // else if (svvl==HIGH && svvr == LOW)
+  // {
+  //   while(svvr == LOW){
+  //   RightMotor->setSpeed(150);
+  //   RightMotor->run(FORWARD);
+  //   LeftMotor->run(RELEASE);
+  //   svvr=digitalRead(ssr);
+  //   }
+  // }
+
+  // else if (svvl==LOW && svvr == HIGH)
+  // {
+  //   while(svvl == LOW){
+  //   LeftMotor->setSpeed(150);
+  //   LeftMotor->run(FORWARD);
+  //   RightMotor->run(RELEASE);
+  //   svvl=digitalRead(ssl);
+  //   }
+  // }
+
+  else if (svvl==HIGH || svvr == HIGH)
   {
-    counter();
-  }
-  }
+    //stop();
+    //delay(tdelay);
+    counterforward();
+    counterfunction();
+    }
+
   else if(svl==HIGH   && svr==LOW)
   {
   left(); 
@@ -160,20 +186,22 @@ void right90() //turn 90 degrees
   // int interval = 2000;
   // while((millis()-current_time) < interval){
   // Serial.println(millis());
-  RightMotor->setSpeed(25);
-  LeftMotor->setSpeed(225);
+  RightMotor->setSpeed(150);
+  LeftMotor->setSpeed(150);
   LeftMotor->run(FORWARD);
   RightMotor->run(BACKWARD);
-  time_delay();
+  Serial.println("RIGHT90");
+  delay(1000);
  } 
 
 void left90() //turn 90 degrees
  {
-  RightMotor->setSpeed(225);
-  LeftMotor->setSpeed(25);
+  RightMotor->setSpeed(150);
+  LeftMotor->setSpeed(150);
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
-  time_delay();
+  Serial.println("LEFT90");
+  delay(1000);
 }  
 
 void stop()
@@ -190,7 +218,6 @@ void stop()
   if(svvl==HIGH   && svvr==HIGH)
   {
   left90();
-  count++;
   }
 
 }
@@ -205,15 +232,26 @@ void turn_right(){
 
 }
 
-void counter(){
-  if (counter%2 == 0)
+void counterforward()
+ {
+  //adjust the speed here if needed
+  LeftMotor->run(FORWARD);
+  RightMotor->run(FORWARD);
+  Serial.println("FORWARD");
+  delay(500);
+ } 
+void counterfunction(){
+  Serial.println(counter);
+  if (counter == 0)
   {
     left90();
-    counter += 1
+    counter ++;
+    counterforward();
   }
-  else if (counter%2 == 1)
+  else if (counter == 1)
   {
     right90();
-    counter += 1
+    counter ++;
+    counterforward();
   }
 }
