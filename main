@@ -41,10 +41,6 @@ void setup() {
   RightMotor->setSpeed(motorspeed);
   delay(5000);
   int val = digitalRead(buttonPin); // read input value
-  Serial.println(val);
-  Serial.println(linetrack);
-  Serial.println(BACKWARD);
-  Serial.println(FORWARD);
 }
 
 void loop() {
@@ -59,7 +55,6 @@ void loop() {
   }
  
   while (linetrack==1){
-    delay(1000);
     linetracking();
     }
   
@@ -92,22 +87,22 @@ void time_delay(){
 
 void linetracking(){
  //Serial.println("LINETRACKING");
- svr=digitalRead(sl);
- svl=digitalRead(sr);
+ svl=digitalRead(sl);
+ svr=digitalRead(sr);
    
   if(svl==LOW && svr==LOW)
   {
   forward(); 
   }
-  elif(svl==HIGH   && svr==LOW)
+  else if(svl==HIGH   && svr==LOW)
   {
   left(); 
   }
-  elif(svl==LOW && svr==HIGH)
+  else if(svl==LOW && svr==HIGH)
    { 
   right(); 
   }
-  elif(svl==HIGH && svr==HIGH)
+  else if(svl==HIGH && svr==HIGH)
    {
   stop();
   }
@@ -119,6 +114,7 @@ void forward()
   LeftMotor->run(FORWARD);
   RightMotor->run(FORWARD);
   Serial.println("FORWRAD");
+  delay(tdelay);
  } 
 
 void backward()
@@ -126,13 +122,14 @@ void backward()
     LeftMotor->run(BACKWARD);
     RightMotor->run(BACKWARD);
       Serial.println("BACKWARD");
+    delay(tdelay);
    }
 
 void right() 
  {
-  LeftMotor->setSpeed(170);
+  LeftMotor->setSpeed(175);
   LeftMotor->run(FORWARD);
-  RightMotor->setSpeed(125);
+  RightMotor->setSpeed(130);
   RightMotor->run(FORWARD);
     Serial.println("RIGHT");
   delay(tdelay);
@@ -141,9 +138,9 @@ void right()
 
 void left() 
  {
-  RightMotor->setSpeed(170);
+  RightMotor->setSpeed(175);
   RightMotor->run(FORWARD);
-  LeftMotor->setSpeed(125);
+  LeftMotor->setSpeed(130);
   LeftMotor->run(FORWARD);
     Serial.println("LEFT");
   delay(tdelay); 
