@@ -22,7 +22,7 @@ int enl=5;
 int motorspeed=150; //0-255
 int vspeed=100;    
 int tspeed=255;
-int tdelay=20;     
+int tdelay=2;     
 int count = 0; //count the numbers of turn
 
 void setup() {
@@ -92,7 +92,7 @@ void linetracking(){
    
   if(svl==LOW && svr==LOW)
   {
-  forward(); 
+  stop(); 
   }
   else if(svl==HIGH   && svr==LOW)
   {
@@ -104,7 +104,7 @@ void linetracking(){
   }
   else if(svl==HIGH && svr==HIGH)
    {
-  stop();
+  forward();
   }
 }
 
@@ -113,7 +113,7 @@ void forward()
   //adjust the speed here if needed
   LeftMotor->run(FORWARD);
   RightMotor->run(FORWARD);
-  Serial.println("FORWRAD");
+  Serial.println("FORWARD");
   delay(tdelay);
  } 
 
@@ -127,9 +127,9 @@ void backward()
 
 void right() 
  {
-  LeftMotor->setSpeed(175);
+  LeftMotor->setSpeed(225);
   LeftMotor->run(FORWARD);
-  RightMotor->setSpeed(130);
+  RightMotor->setSpeed(25);
   RightMotor->run(FORWARD);
     Serial.println("RIGHT");
   delay(tdelay);
@@ -138,11 +138,11 @@ void right()
 
 void left() 
  {
-  RightMotor->setSpeed(175);
+  RightMotor->setSpeed(225);
   RightMotor->run(FORWARD);
-  LeftMotor->setSpeed(130);
+  LeftMotor->setSpeed(25);
   LeftMotor->run(FORWARD);
-    Serial.println("LEFT");
+  Serial.println("LEFT");
   delay(tdelay); 
 }  
 
@@ -155,7 +155,7 @@ void right90() //turn 90 degrees
   // Serial.println(millis());
   LeftMotor->run(FORWARD);
   RightMotor->run(BACKWARD);
-  time_delay();
+  //time_delay();
  } 
 
 void left90() //turn 90 degrees
