@@ -123,7 +123,8 @@ svvl=digitalRead(ssl);
   {
     //stop();
     //delay(tdelay);
-    counterforward();
+    forward();
+    delay(500);
     counterfunction();
     }
 
@@ -232,14 +233,6 @@ void turn_right(){
 
 }
 
-void counterforward()
- {
-  //adjust the speed here if needed
-  LeftMotor->run(FORWARD);
-  RightMotor->run(FORWARD);
-  Serial.println("FORWARD");
-  delay(500);
- } 
 void counterfunction(){
   Serial.println(counter);
   if (counter == 0)
