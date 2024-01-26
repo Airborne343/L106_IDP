@@ -7,6 +7,7 @@ Adafruit_DCMotor *LeftMotor = AFMS.getMotor(4);
 Adafruit_DCMotor *RightMotor = AFMS.getMotor(1);
 
 bool linetrack = false;
+bool back = false;
 int buttonPin = 4;
 int sl=6;   //sensor left
 int sr=7;  //sensor right
@@ -90,8 +91,8 @@ void linetracking(){
  //Serial.println("LINETRACKING");
  svl=digitalRead(sl);
  svr=digitalRead(sr);
-svvr=digitalRead(ssr);
-svvl=digitalRead(ssl);
+ svvr=digitalRead(ssr);
+ svvl=digitalRead(ssl);
    
   if(svl==LOW && svr==LOW)
   {
@@ -123,8 +124,6 @@ svvl=digitalRead(ssl);
   {
     //stop();
     //delay(tdelay);
-    forward();
-    delay(500);
     counterfunction();
     }
 
@@ -202,7 +201,7 @@ void left90() //turn 90 degrees
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
   Serial.println("LEFT90");
-  delay(1000);
+  while
 }  
 
 void stop()
@@ -237,14 +236,21 @@ void counterfunction(){
   Serial.println(counter);
   if (counter == 0)
   {
+    forward();
+    delay(500);
     left90();
     counter ++;
-    counterforward();
+    forward();
+    delay(500);
   }
   else if (counter == 1)
   {
+    forward();
+    delay(500);
     right90();
     counter ++;
-    counterforward();
+    forward();
+    delay(500);
+    back = true;
   }
 }
