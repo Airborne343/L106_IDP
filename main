@@ -71,7 +71,7 @@ void initialise(){
   LeftMotor->run(FORWARD);
   RightMotor->setSpeed(150);
   RightMotor->run(FORWARD);
-  delay(1000);
+  delay(500);
   linetrack = true;
   //need to add a release here? myMotor->run(RELEASE);
 }
@@ -96,8 +96,8 @@ void linetracking(){
    
   if(svl==LOW && svr==LOW)
   {
-  stop(); 
-  delay(tdelay);
+  //backward(); 
+  //delay(tdelay);
   }
 
   // else if (svvl==HIGH && svvr == LOW)
@@ -154,7 +154,7 @@ void backward()
    {
     LeftMotor->run(BACKWARD);
     RightMotor->run(BACKWARD);
-      Serial.println("BACKWARD");
+    Serial.println("BACKWARD");
     delay(tdelay);
    }
 
@@ -187,28 +187,26 @@ void right90() //turn 90 degrees
   // while((millis()-current_time) < interval){
   // Serial.println(millis());
   Serial.println("RIGHT90");
-  forward();
-  delay(200);
-  while (svl == LOW){
+ 
     RightMotor->setSpeed(150);
     LeftMotor->setSpeed(150);
     LeftMotor->run(FORWARD);
     RightMotor->run(BACKWARD);
+    delay(1300);
   }
- } 
+  
 
 void left90() //turn 90 degrees
  {
   Serial.println("LEFT90");
-  forward();
-  delay(200);
-  while (svr == LOW){
-    RightMotor->setSpeed(150);
-    LeftMotor->setSpeed(150);
-    LeftMotor->run(BACKWARD);
-    RightMotor->run(FORWARD);
+  //forward();
+  //delay(500);
+  RightMotor->setSpeed(150);
+  LeftMotor->setSpeed(150);
+  LeftMotor->run(BACKWARD);
+  RightMotor->run(FORWARD);
+    delay(1300);
   }
-}  
 
 void stop()
  {
@@ -242,21 +240,32 @@ void counterfunction(){
   Serial.println(counter);
   if (counter == 0)
   {
+    forward();
+    delay(200);
     left90();
     counter ++;
     forward();
-    delay(500);
+    delay(200);
   }
   else if (counter == 1)
   {
+    forward();
+    delay(300);
     right90();
     forward();
-    delay(500);
-   //pickup function
+    delay(3000);
+  //pickup function
   //detect block
     back = true;
-    backward();
-    delay(500);
+    while(svvl == LOW && svvr == LOW){
+      linetrack=false;
+      backward();
+      svvr=digitalRead(ssr);
+      svvl=digitalRead(ssl);
+    }
+    left90();
+    linetrack=true;
+
     counter ++;
   }
 }
