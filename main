@@ -1,13 +1,7 @@
 #include <Adafruit_MotorShield.h>
-
-// Create the motor shield object with the default I2C address
-Adafruit_MotorShield AFMS = Adafruit_MotorShield();
-// Select which 'port' M1, M2, M3 or M4. In this case, M1
-Adafruit_DCMotor *LeftMotor = AFMS.getMotor(4);
-Adafruit_DCMotor *RightMotor = AFMS.getMotor(1);
+#include "motorfunctions.h"
 
 bool linetrack = false;
-bool back = false;
 int buttonPin = 4;
 int sl=6;   //sensor left
 int sr=7;  //sensor right
@@ -18,12 +12,7 @@ int svl=0; //sensor value left
 int svvr=0; //outer sensor value right
 int svvl=0; //outer sensor value left
 int led=13;
-int enr=3; 
-int enl=5;
-int motorspeed=150; //0-255
-int vspeed=100;    
-int tspeed=255;
-int tdelay=2;     
+int motorspeed=150; //0-255       
 int counter = 0; //count the numbers of turn
 
 
@@ -62,8 +51,10 @@ void loop() {
   
 }
 
-//Universal function
+//UNIVERSAL FUNCTION
 
+
+//STARTING FUNCTION
 void initialise(){
   //move forward for 2 seconds
   Serial.println("INITIALISE");
@@ -76,6 +67,8 @@ void initialise(){
   //need to add a release here? myMotor->run(RELEASE);
 }
 
+
+//TIME DELAY FUNCTION
 void time_delay(){
   unsigned long previousMillis = 0; //store time for second event
   const long interval = 1000; //interval for second event
@@ -87,8 +80,8 @@ void time_delay(){
 }
 
 
+//LINETRACKING FUNCTION
 void linetracking(){
- //Serial.println("LINETRACKING");
  svl=digitalRead(sl);
  svr=digitalRead(sr);
  svvr=digitalRead(ssr);
@@ -100,32 +93,13 @@ void linetracking(){
   //delay(tdelay);
   }
 
-  // else if (svvl==HIGH && svvr == LOW)
-  // {
-  //   while(svvr == LOW){
-  //   RightMotor->setSpeed(150);
-  //   RightMotor->run(FORWARD);
-  //   LeftMotor->run(RELEASE);
-  //   svvr=digitalRead(ssr);
-  //   }
-  // }
-
-  // else if (svvl==LOW && svvr == HIGH)
-  // {
-  //   while(svvl == LOW){
-  //   LeftMotor->setSpeed(150);
-  //   LeftMotor->run(FORWARD);
-  //   RightMotor->run(RELEASE);
-  //   svvl=digitalRead(ssl);
-  //   }
-  // }
 
   else if (svvl==HIGH || svvr == HIGH)
   {
-    //stop();
-    //delay(tdelay);
     counterfunction();
     }
+  
+  else if ()
 
   else if(svl==HIGH   && svr==LOW)
   {
@@ -141,101 +115,8 @@ void linetracking(){
   }
 }
 
-void forward()
- {
-  //adjust the speed here if needed
-  LeftMotor->run(FORWARD);
-  RightMotor->run(FORWARD);
-  Serial.println("FORWARD");
-  delay(tdelay);
- } 
 
-void backward()
-   {
-    LeftMotor->run(BACKWARD);
-    RightMotor->run(BACKWARD);
-    Serial.println("BACKWARD");
-    delay(tdelay);
-   }
-
-void right() 
- {
-  LeftMotor->setSpeed(225);
-  LeftMotor->run(FORWARD);
-  RightMotor->setSpeed(25);
-  RightMotor->run(FORWARD);
-  Serial.println("RIGHT");
-  delay(tdelay);
-  }
-
-
-void left() 
- {
-  RightMotor->setSpeed(225);
-  RightMotor->run(FORWARD);
-  LeftMotor->setSpeed(25);
-  LeftMotor->run(FORWARD);
-  Serial.println("LEFT");
-  delay(tdelay); 
-}  
-
-void right90() //turn 90 degrees
- {
-  //unsigned long current_time = millis(); 
-  // Serial.println(current_time);
-  // int interval = 2000;
-  // while((millis()-current_time) < interval){
-  // Serial.println(millis());
-  Serial.println("RIGHT90");
- 
-    RightMotor->setSpeed(150);
-    LeftMotor->setSpeed(150);
-    LeftMotor->run(FORWARD);
-    RightMotor->run(BACKWARD);
-    delay(1300);
-  }
-  
-
-void left90() //turn 90 degrees
- {
-  Serial.println("LEFT90");
-  //forward();
-  //delay(500);
-  RightMotor->setSpeed(150);
-  LeftMotor->setSpeed(150);
-  LeftMotor->run(BACKWARD);
-  RightMotor->run(FORWARD);
-    delay(1300);
-  }
-
-void stop()
- {
-  LeftMotor->run(RELEASE);
-  RightMotor->run(RELEASE);
- }
-
- void turn_left(){
-  
-  svvr=digitalRead(ssr);
-  svvl=digitalRead(ssl);
-  
-  if(svvl==HIGH   && svvr==LOW)
-  {
-  left90();
-  }
-
-}
-
-void turn_right(){
-  svvr=digitalRead(ssr);
-  svvl=digitalRead(ssl);
-  if(svvl==LOW   && svvr==HIGH)
-  {
-  right90(); 
-  }
-
-}
-
+//CONTERFUNCTION
 void counterfunction(){
   Serial.println(counter);
   if (counter == 0)
@@ -254,9 +135,12 @@ void counterfunction(){
     right90();
     forward();
     delay(3000);
+    //sensing function (Joel) if value less than something, then we know which block it is. HARD= TRUE or SOFT = TRUE.
+    //backward and define 180 degrees function and grab and forward. 
+    // backward linetracking (Nathan) only when back == True
+
   //pickup function
   //detect block
-    back = true;
     while(svvl == LOW && svvr == LOW){
       linetrack=false;
       backward();
