@@ -99,7 +99,6 @@ void linetracking(){
     counterfunction();
     }
   
-  else if ()
 
   else if(svl==HIGH   && svr==LOW)
   {
