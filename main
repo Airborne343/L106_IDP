@@ -144,6 +144,7 @@ void counterfunction(){
 
     counter ++;
   }
+  else if (counter == 2)
 }
 void ultrasensor() {
  // read the value from the sensor:
@@ -155,7 +156,7 @@ if(1<dist_t && dist_t< 6)
     Serial.println("metal");
     Serial.println(dist_t);
     Soft = false;
-    //counter ++; //metal block detect so go to green 
+    counter ++; //metal block detect so go to green 
     delay(500);
   }
 else if (6 <dist_t && dist_t < 11)   
@@ -163,7 +164,7 @@ else if (6 <dist_t && dist_t < 11)
     Serial.println("foam");
     Serial.println(dist_t);
     Soft = true;
-    //counter += 2; //foam block detect so go to red
+    counter += 2; //foam block detect so go to red
     delay(500);
     }
 else {
