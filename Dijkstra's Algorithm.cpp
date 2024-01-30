@@ -79,13 +79,8 @@ void display() {
         Serial.print("\t\t\t");
         Serial.print(dist[i]);
         Serial.print("\t\t\t");
-        Serial.println( i , " ");
         int parnode = parent[i];
-        while (parnode != source) {
-            Serial.println(" <- ");
-            Serial.print(parnode);
-            parnode = parent[parnode];
-         }
+        Serial.println(parnode);
      }
  }
 
