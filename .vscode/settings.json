@@ -1,5 +1,9 @@
 {
     "files.associations": {
+<<<<<<< HEAD
         "main": "cpp"
+=======
+        "ultrasonic sensor": "c"
+>>>>>>> 274417160301c2d7794a20b86b5d49445ffefd51
     }
 }

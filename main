@@ -153,6 +153,7 @@ void counterfunction(){
       //Write something here
     }
 
+    ultrasensor();
     //sensing function (Joel) if value less than something, then we know which block it is. HARD= TRUE or SOFT = TRUE.
     //backward and define 180 degrees function and grab and forward. 
     // backward linetracking (Nathan) only when back == True
@@ -165,4 +166,31 @@ void counterfunction(){
 
     counter ++;
   }
+  else if (counter == 2)
+}
+void ultrasensor() {
+ // read the value from the sensor:
+sensity_t = analogRead(sensityPin);
+dist_t = sensity_t * MAX_RANG / ADC_SOLUTION;//
+
+if(1<dist_t && dist_t< 6)
+  {
+    Serial.println("metal");
+    Serial.println(dist_t);
+    Soft = false;
+    counter ++; //metal block detect so go to green 
+    delay(500);
+  }
+else if (6 <dist_t && dist_t < 11)   
+    {
+    Serial.println("foam");
+    Serial.println(dist_t);
+    Soft = true;
+    counter += 2; //foam block detect so go to red
+    delay(500);
+    }
+else {
+  delay(500);
+}
+delay(500);
 }

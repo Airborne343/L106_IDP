@@ -5,29 +5,39 @@ URM09 Ultrasonic Sensor test
 */
 #define MAX_RANG (520)//the max measurement value of the module is 520cm(a little bit longerthan effective max range)
 #define ADC_SOLUTION (1023.0)//ADC accuracy of Arduino UNO is 10bit
-int sensityPin = 9; // select the input pin
-float dist_t, sensity_t; // define variables
-bool object = false; //define block
+int sensityPin = A0; // select the input pin
+float dist_t, sensity_t ;// define variables
+bool Soft = false; //define block
 int counter =1;
 void setup() {
  // Serial init
  Serial.begin(9600);
 }
 
-void ultrasense() {
+void loop() {
  // read the value from the sensor:
 sensity_t = analogRead(sensityPin);
 dist_t = sensity_t * MAX_RANG / ADC_SOLUTION;//
-if(dist_t >= 2 && counter == 1);
+
+if(1<dist_t && dist_t< 6)
   {
-    counter ++; //metal block detect so go to green 
     Serial.println("metal");
+    Serial.println(dist_t);
+    Soft = false;
+    //counter ++; //metal block detect so go to green 
+    delay(500);
   }
-else if(0<dist_t < 2 && counter ==1)    
+else if (6 <dist_t && dist_t < 11)   
     {
-    counter += 2; //foam block detect so go to red
     Serial.println("foam");
+    Serial.println(dist_t);
+    Soft = true;
+    //counter += 2; //foam block detect so go to red
+    delay(500);
     }
-Serial.print(dist_t,0);
+else {
+  delay(500);
+}
 delay(500);
 }
+
