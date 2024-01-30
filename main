@@ -145,23 +145,36 @@ void counterfunction(){
       svvr=digitalRead(ssr);
       svvl=digitalRead(ssl);
     }
-    if (SOFT == true){
-      right90();
-    }
-    else {
-      left90();
-    }
     counter ++;
   }
 
-  else if (counter == 2)  // Moving into red zone to put the first block
+  else if (counter == 2)   // Moving into red zone to put the first block
     {
-      //Write something here
-      // if soft is true, a is RIGHT and b is LEFT
+      if (SOFT == true) {
+      left90();
+    }
+    else {
+      right90();
+    }
+    counter ++;
     }
 
   else if (counter == 3) //moving into green zone to put the first block
   {
+    if (SOFT == true) {
+      left90();
+      forward();
+      delay(1000);
+      release();
+    }
+    else {
+      right90();
+      forward();
+      delay(1000);
+      release();
+    }
+    counter ++;
+
     //blablabla
   }
 }
