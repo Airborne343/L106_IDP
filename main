@@ -12,6 +12,8 @@ int ledPin=13;
 int motorspeed=150; //0-255       
 int counter = 0; //count the numbers of turn
 int t = 0;  //time taken in the junction
+float sensity_t;
+float dist_t;
 
 void setup() {
   // put your setup code here, to run once:
@@ -143,7 +145,7 @@ void counterfunction(){
       svvr=digitalRead(ssr);
       svvl=digitalRead(ssl);
     }
-    if (SOFT == TRUE){
+    if (SOFT == true){
       right90();
     }
     else {
@@ -173,7 +175,7 @@ if(1<dist_t && dist_t< 6)
   {
     Serial.println("metal");
     Serial.println(dist_t);
-    Soft = false;
+    SOFT = false;
     counter ++; //metal block detect so go to green 
     delay(500);
   }
@@ -181,7 +183,7 @@ else if (6 <dist_t && dist_t < 11)
     {
     Serial.println("foam");
     Serial.println(dist_t);
-    Soft = true;
+    SOFT = true;
     counter += 2; //foam block detect so go to red
     delay(500);
     }
