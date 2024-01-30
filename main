@@ -1,5 +1,9 @@
 #include <Adafruit_MotorShield.h>
 #include "motorfunctions.h"
+#define MAX_RANG (520)//the max measurement value of the module is 520cm(a little bit longerthan effective max range)
+#define ADC_SOLUTION (1023.0)//ADC accuracy of Arduino UNO is 10bit
+
+int sensityPin = A0; // select the input pin
 
 bool linetrack = false;
 bool SOFT = false;
