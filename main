@@ -131,7 +131,7 @@ void counterfunction(){
       linetracking();
       t++;
     }
-    //Call the Joel's sensing function (return SOFT==TRUE or FALSE)
+    ultrasensor(); //Sensing and detecting the block
     svvl = LOW;
     svvr = LOW;
     while(svvl == LOW && svvr == LOW){
@@ -148,26 +148,18 @@ void counterfunction(){
     counter ++;
   }
 
-  else if (counter == 2)  // Moving into the zone to put the first block
+  else if (counter == 2)  // Moving into red zone to put the first block
     {
       //Write something here
+      // if soft is true, a is RIGHT and b is LEFT
     }
 
-    ultrasensor();
-    //sensing function (Joel) if value less than something, then we know which block it is. HARD= TRUE or SOFT = TRUE.
-    //backward and define 180 degrees function and grab and forward. 
-    // backward linetracking (Nathan) only when back == True
-
-  //pickup function
-  //detect block
-
-    left90();
-    linetrack=true;
-
-    counter ++;
+  else if (counter == 3) //moving into green zone to put the first block
+  {
+    //blablabla
   }
-  else if (counter == 2)
 }
+
 void ultrasensor() {
  // read the value from the sensor:
 sensity_t = analogRead(sensityPin);
