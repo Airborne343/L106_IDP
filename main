@@ -3,14 +3,6 @@
 
 bool linetrack = false;
 int buttonPin = 4;
-int sl=6;   //sensor left
-int sr=7;  //sensor right
-int ssr=8;   //outer sensor right
-int ssl=9;   //outer sensor left
-int svr=0; //sensor value right
-int svl=0; //sensor value left
-int svvr=0; //outer sensor value right
-int svvl=0; //outer sensor value left
 int led=13;
 int motorspeed=150; //0-255       
 int counter = 0; //count the numbers of turn
@@ -32,6 +24,7 @@ void setup() {
   RightMotor->setSpeed(motorspeed);
   delay(5000);
   int val = digitalRead(buttonPin); // read input value
+  myservo.attach(ServoPin); // attaches the servo on pin 9 to the servo object
 }
 
 void loop() {
@@ -99,7 +92,6 @@ void linetracking(){
     counterfunction();
     }
   
-
   else if(svl==HIGH   && svr==LOW)
   {
   left(); 
