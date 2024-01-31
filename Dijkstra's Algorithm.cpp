@@ -2,7 +2,8 @@
 
 int INF = 999;
 int V = 14;
-int source = 0;
+int source = 10;
+int end = 5;
 int cost[14][14] = {
   {0,     27,    999,   999,   999,   999,   999,   999,   999,   999,   999,   999,   999,   999},
   {27,    0,     30,    999,   999,   999,   101,   999,   999,   999,   999,   999,   999,   999},
@@ -20,26 +21,29 @@ int cost[14][14] = {
   {999,   999,   999,   999,   999,   999,   999,   999,   177,   177,   999,   999,   75,     0}
 };
 int dist[100];
+int path[5];
 bool visited[100] = {0};
 int parent[100];
 
+
 void setup() {
-  Serial.begin(115200);
-  Serial.println("Number of vertices:");
-  Serial.print(V);
-  Serial.println("src node : ");
-  Serial.print(source);
-  for (int i = 0; i < V; i++) {
-    for (int j = 0; j < V; j++) {
-      Serial.print(cost[i][j]);
-  }
- }
-  init();
+  Serial.begin(9600);
+  Serial.print("Number of vertices:");
+  Serial.println(V);
+  setSourceAndEnd(12, 6);
+  Serial.print("source node : ");
+  Serial.println(source);
+  initialise_dijkstra();
   dijkstra();
   display();
 }
 
-void init() {
+void setSourceAndEnd(int s, int e) {
+  source = s;
+  end = e;
+}
+
+void initialise_dijkstra() {
   for (int i = 0; i < V; i++) {
     parent[i] = i;
     dist[i] = INF;
@@ -73,17 +77,27 @@ void dijkstra() {
 }
 
 void display() {
-    Serial.println("Node:\t\t\tCost :\t\t\tPath");
-    for (int i = 0; i < V; i++) {
-        Serial.println(i);
-        Serial.print("\t\t\t");
-        Serial.print(dist[i]);
-        Serial.print("\t\t\t");
-        int parnode = parent[i];
-        Serial.println(parnode);
-     }
- }
+  Serial.println("Node:\t\t\tCost :\t\t\tPath:");
+  Serial.print(end);
+  Serial.print("\t\t\t");
+  Serial.print(dist[end]);
+  Serial.print("\t\t\t");
 
-int main(void) {
-  setup();
+  int pathNodes[V];
+  int pathLength = 0;
+  int currentNode = end;
+
+  // Backtrack from end to source to populate the path array
+  while (currentNode != source && currentNode != parent[currentNode]) {
+    pathNodes[pathLength++] = currentNode;
+    currentNode = parent[currentNode];
+  }
+
+    // Add source node to the path array
+  pathNodes[pathLength++] = source;
+}
+
+
+void loop(){
+  delay(2000);
 }
