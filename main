@@ -78,7 +78,7 @@ void time_delay(){
     //execute a piece of code, every *2 seconds*
    }
 }
-
+//add
 
 //LINETRACKING FUNCTION
 void linetracking(){
@@ -145,13 +145,13 @@ void counterfunction(){
       svvr=digitalRead(ssr);
       svvl=digitalRead(ssl);
     }
-    counter ++;
+counter ++;
   }
 
   else if (counter == 2)   // Moving into red zone to put the first block
     {
       if (SOFT == true) {
-      left90();
+    left90();
     }
     else {
       right90();
@@ -177,7 +177,7 @@ void counterfunction(){
 
     //blablabla
   }
-}
+  }
 
 void ultrasensor() {
  // read the value from the sensor:
