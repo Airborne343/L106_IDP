@@ -177,6 +177,36 @@ counter ++;
 
     //blablabla
   }
+  else if (counter == 4)
+  {
+    backwardlinetracking();
+    counter ++;
+  }
+  else if (counter == 5)
+  {
+    backwardlinetracking();
+    counter ++;
+  }
+  else if (counter == 6)
+  {
+    if (SOFT == true) {
+      left90();
+    }
+    else {
+      right90();
+    }
+    counter ++;
+  }
+  else if (counter == 7)
+  {
+    if (SOFT == true) {
+      right90();
+    }
+    else {
+      left90();
+    }
+    counter ++;
+  }
   }
 
 void ultrasensor() {
