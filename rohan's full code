@@ -260,10 +260,28 @@ void node01(){
   linetrack = false;
   delay(1000);}
 
+void node10(){
+  right90();
+  linetrack = true;
+  if (svvl==HIGH && svvr == HIGH){
+    stop();
+  }
+  linetrack = false;
+  initialise();
+  delay(1000);}
 void node12(){
   left90();
   linetrack = true;
   if (svvr == HIGH){
+    stop();
+  }
+  linetrack = false;
+  delay(1000);}
+
+void node16(){
+  right90();
+  linetrack = true;
+  if (svvl==HIGH && svvr == HIGH){
     stop();
   }
   linetrack = false;
