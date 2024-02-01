@@ -137,11 +137,11 @@ void counterfunction(){
       linetracking();
       t++;
     }
-    sensity_t = analogRead(sensityPin);
-    dist_t = sensity_t * MAX_RANG / ADC_SOLUTION;
-    if (dist_t<9){
-    stop();
-    }
+//sensity_t = analogRead(sensityPin);
+//dist_t = sensity_t * MAX_RANG / ADC_SOLUTION;
+//if (dist_t<9){
+//stop();
+   // }
     ultrasensor(); //Sensing and detecting the block
     svvl = LOW;
     svvr = LOW;
