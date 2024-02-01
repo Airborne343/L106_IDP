@@ -19,7 +19,7 @@ void loop() {
 sensity_t = analogRead(sensityPin);
 dist_t = sensity_t * MAX_RANG / ADC_SOLUTION;//
 
-if(1<dist_t && dist_t< 6)
+if(1<dist_t && dist_t< 5)
   {
     Serial.println("metal");
     Serial.println(dist_t);
@@ -27,7 +27,7 @@ if(1<dist_t && dist_t< 6)
     //counter ++; //metal block detect so go to green 
     delay(500);
   }
-else if (6 <dist_t && dist_t < 11)   
+else if (6 <dist_t && dist_t < 8)   
     {
     Serial.println("foam");
     Serial.println(dist_t);
