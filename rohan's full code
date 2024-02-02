@@ -1,9 +1,5 @@
 #include <Adafruit_MotorShield.h>
-#include "motorfunctions.h"
-#include "linetracking_timedelay.h"
-#include "dijkstra.h"
 #include "nodefunctions.h"
-
 
 int counter = 0; //count the numbers of turn
 
@@ -22,7 +18,7 @@ void setup() {
   pinMode(sr,INPUT);
   LeftMotor->setSpeed(motorspeed);
   RightMotor->setSpeed(motorspeed);
-  delay(5000);
+  delay(15000);
   int val = digitalRead(buttonPin); // read input value
   first_block();
   second_block();
