@@ -1,5 +1,6 @@
 //LINETRACKING FUNCTION
 #include <Adafruit_MotorShield.h>
+#include "motorfunctions.h"
 
 bool linetrack = false;
 int buttonPin = 4;
