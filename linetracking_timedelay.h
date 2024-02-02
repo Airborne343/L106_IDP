@@ -4,27 +4,20 @@
 
 bool linetrack = false;
 int buttonPin = 4;
-int sl=6;   //sensor left
-int sr=7;  //sensor right
-int ssr=8;   //outer sensor right
-int ssl=9;   //outer sensor left
-int svr=0; //sensor value right
-int svl=0; //sensor value left
-int svvr=0; //outer sensor value right
-int svvl=0; //outer sensor value left
 int led=13;
 int motorspeed=150; //0-255        
 
 void initialise(){
   //move forward for 2 seconds
   Serial.println("INITIALISE");
-  LeftMotor->setSpeed(150);
+  LeftMotor->setSpeed(200);
   LeftMotor->run(FORWARD);
-  RightMotor->setSpeed(150);
+  RightMotor->setSpeed(200);
   RightMotor->run(FORWARD);
-  delay(500);
+  delay(200);
   //need to add a release here? myMotor->run(RELEASE);
-  }
+}
+
 void linetracking(){
  svl=digitalRead(sl);
  svr=digitalRead(sr);
@@ -51,18 +44,19 @@ void linetracking(){
 
 void loop() {
   // put your main code here, to run repeatedly
-  // int val = digitalRead(buttonPin); // read input value
+  int val = digitalRead(buttonPin); // read input value
   LeftMotor->setSpeed(150);
   RightMotor->setSpeed(150);
-  // if (val==HIGH){
-  //   Serial.print("ON");
-  //   initialise();
-  //   Serial.println("RUN");
-  // }
+  if (val==HIGH){
+    Serial.print("ON");
+    initialise();
+    Serial.println("RUN");
+  }
  
   while (linetrack==1){
     linetracking();
     }
+  
 }
 
 //TIME DELAY FUNCTION
