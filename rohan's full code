@@ -1,60 +1,13 @@
 #include <Adafruit_MotorShield.h>
-// #include <motorfunctions>
-// #include <dijkstra>
-// #include <nodefunctions>
+#include "nodefunctions.h"
 
-// Create the motor shield object with the default I2C address
-Adafruit_MotorShield AFMS = Adafruit_MotorShield();
-// Select which 'port' M1, M2, M3 or M4. In this case, M1
-Adafruit_DCMotor *LeftMotor = AFMS.getMotor(4);
-Adafruit_DCMotor *RightMotor = AFMS.getMotor(1);
-
-bool linetrack = false;
-int buttonPin = 4;
-int sl=6;   //sensor left
-int sr=7;  //sensor right
-int ssr=8;   //outer sensor right
-int ssl=9;   //outer sensor left
-int svr=0; //sensor value right
-int svl=0; //sensor value left
-int svvr=0; //outer sensor value right
-int svvl=0; //outer sensor value left
-int led=13;
-int motorspeed=150; //0-255       
 int counter = 0; //count the numbers of turn
-int tdelay=2;
-int INF = 999;
-int V = 14;
-int source = 10;
-int end = 5;
-int cost[14][14] = {
-  {0,     27,    999,   999,   999,   999,   999,   999,   999,   999,   999,   999,   999,   999},
-  {27,    0,     30,    999,   999,   999,   101,   999,   999,   999,   999,   999,   999,   999},
-  {999,   30,    0,     32,    68,    999,   999,   999,   999,   999,   999,   999,   999,   999},
-  {999,   999,   32,    0,     999,   999,   999,   999,   999,   999,   999,   999,   999,   999},
-  {999,   999,   68,    999,   0,     34,    999,   999,   82,    999,   999,   999,   999,   999},
-  {999,   999,   999,   999,   34,    0,     999,   999,   999,   999,   999,   999,   999,   999},
-  {999,   101,   999,   999,   999,   999,   0,     34,    999,   82,    999,   999,   999,   999},
-  {999,   999,   999,   999,   999,   999,   34,    0,     999,   999,   999,   999,   999,   999},
-  {999,   999,   999,   999,   82,    999,   999,   999,   0,     999,   999,   999,   99,    177},
-  {999,   999,   999,   999,   999,   999,   82,    999,   999,   0,     69,    999,   999,   177},
-  {999,   999,   999,   999,   999,   999,   999,   999,   999,   69,    0,     29,    30,    999},
-  {999,   999,   999,   999,   999,   999,   999,   999,   999,   999,   29,    0,     999,   999},
-  {999,   999,   999,   999,   999,   999,   999,   999,   99,    999,   30,    999,   0,     75},
-  {999,   999,   999,   999,   999,   999,   999,   999,   177,   177,   999,   999,   75,     0}};
-int dist[100];
-int path[5];
-bool visited[100] = {0};
-int parent[100];
+
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   Serial.println("Setup");
-  // setSourceAndEnd();
-  // initialise_dijkstra();
-  // dijkstra();
-  // display();
   if (!AFMS.begin()) {         // create with the default frequency 1.6KHz
   // if (!AFMS.begin(1000)) {  // OR with a different frequency, say 1KHz
     Serial.println("Could not find Motor Shield. Check wiring.");
@@ -65,279 +18,25 @@ void setup() {
   pinMode(sr,INPUT);
   LeftMotor->setSpeed(motorspeed);
   RightMotor->setSpeed(motorspeed);
-  delay(5000);
+  delay(15000);
   int val = digitalRead(buttonPin); // read input value
-  if (val == 1 && counter == 0){
-    first_block();
-    counter++;
-  }
-  
-  if (val == 1 && counter == 1){
-    second_block();
-    counter++;
+  first_block();
+  second_block();
   }
 
-}
-
-//MOTORFUNCTIONS
-void forward()
- {
-  //adjust the speed here if needed
-  LeftMotor->run(FORWARD);
-  RightMotor->run(FORWARD);
-  // Serial.println("FORWARD");
-  delay(tdelay);
- } 
-
-void backward()
-   {
-    LeftMotor->run(BACKWARD);
-    RightMotor->run(BACKWARD);
-    // Serial.println("BACKWARD");
-    delay(tdelay);
-   }
-
-void right() 
- {
-  LeftMotor->setSpeed(225);
-  LeftMotor->run(FORWARD);
-  RightMotor->setSpeed(25);
-  RightMotor->run(FORWARD);
-  // Serial.println("RIGHT");
-  delay(tdelay);
-  }
-
-
-void left() 
- {
-  RightMotor->setSpeed(225);
-  RightMotor->run(FORWARD);
-  LeftMotor->setSpeed(25);
-  LeftMotor->run(FORWARD);
-  // Serial.println("LEFT");
-  delay(tdelay); } 
-
-void right90() //turn 90 degrees
- {
-  //unsigned long current_time = millis(); 
-  // Serial.println(current_time);
-  // int interval = 2000;
-  // while((millis()-current_time) < interval){
-  // Serial.println(millis());
-  Serial.println("RIGHT90");
- 
-    RightMotor->setSpeed(150);
-    LeftMotor->setSpeed(150);
-    LeftMotor->run(FORWARD);
-    RightMotor->run(BACKWARD);
-    delay(1300);
-  }
-  
-
-void left90() //turn 90 degrees
- {
-  Serial.println("LEFT90");
-  //forward();
-  //delay(500);
-  RightMotor->setSpeed(150);
-  LeftMotor->setSpeed(150);
-  LeftMotor->run(BACKWARD);
-  RightMotor->run(FORWARD);
-    delay(1300);
-  }
-
-void stop()
- {
-  LeftMotor->run(RELEASE);
-  RightMotor->run(RELEASE);
- }
-
-//DIJKSTRA
-void setSourceAndEnd(int s, int e) {
-  source = s;
-  end = e;}
-
-void initialise_dijkstra() {
-  for (int i = 0; i < V; i++) {
-    parent[i] = i;
-    dist[i] = INF;
-  }
-  dist[source] = 0;}
-
-int getNearestNode() {
-  int minvalue = INF;
-  int minnode = 0;
-  for (int i = 0; i < V; i++) {
-    if (!visited[i] && dist[i] < minvalue) {
-      minvalue = dist[i];
-      minnode = i;
-    }
-  }
-  return minnode;}
-
-void dijkstra() {
-  for (int i = 0; i < V; i++) {
-    int nearest = getNearestNode();
-    visited[nearest] = true;
-    for (int adj = 0; adj < V; adj++) {
-      if (cost[nearest][adj] != INF && dist[adj] > dist[nearest] + cost[nearest][adj]) {
-        dist[adj] = dist[nearest] + cost[nearest][adj];
-        parent[adj] = nearest;
-      }
-    }
-  }}
-
-void display() {
-    Serial.println("Node:\t\t\tCost :\t\t\tPath:");
-    Serial.print(end);
-    Serial.print("\t\t\t");
-    Serial.print(dist[end]);
-    Serial.print("\t\t\t");
-
-    int path[V];
-    int pathLength = 0;
-    int currentNode = end;
-
-    // Backtrack from end to source to populate the path array
-    while (currentNode != source && currentNode != parent[currentNode]) {
-        path[pathLength++] = currentNode;
-        currentNode = parent[currentNode];
-    }
-
-    // Add source node to the path array
-    path[pathLength++] = source;
-    for (int i = pathLength - 1; i >= 0; i--) {
-        Serial.print(path[i]);
-        if (i > 0) {
-            Serial.print(" -> ");
-        }
-    }
-    Serial.println();
-    }
-
-//NODEFUNCTIONS
-//LINETRACKING FUNCTION
-void initialise(){
-  //move forward for 2 seconds
-  Serial.println("INITIALISE");
-  LeftMotor->setSpeed(150);
-  LeftMotor->run(FORWARD);
-  RightMotor->setSpeed(150);
-  RightMotor->run(FORWARD);
-  delay(500);
-  linetrack = true;
-  //need to add a release here? myMotor->run(RELEASE);
-  }
-void linetracking(){
- svl=digitalRead(sl);
- svr=digitalRead(sr);
- svvr=digitalRead(ssr);
- svvl=digitalRead(ssl);
-   
-  if(svl==LOW && svr==LOW)
-  {
-  stop();
-  }
-
-  else if(svl==HIGH   && svr==LOW)
-  {
-  left(); 
-  }
-  else if(svl==LOW && svr==HIGH)
-   { 
-  right(); 
-  }
-  else if(svl==HIGH && svr==HIGH)
-   {
-  forward();
-  }}
-void node01(){
-  initialise();
-  linetrack = true;
-  if (svvl==HIGH && svvr == HIGH){
-    stop();
-  }
-  linetrack = false;
-  delay(1000);}
-
-void node10(){
-  right90();
-  linetrack = true;
-  if (svvl==HIGH && svvr == HIGH){
-    stop();
-  }
-  linetrack = false;
-  initialise();
-  delay(1000);}
-void node12(){
-  left90();
-  linetrack = true;
-  if (svvr == HIGH){
-    stop();
-  }
-  linetrack = false;
-  delay(1000);}
-
-void node16(){
-  right90();
-  linetrack = true;
-  if (svvl==HIGH && svvr == HIGH){
-    stop();
-  }
-  linetrack = false;
-  delay(1000);}
-
-void node23(){
-  right90();
-  linetrack = true;
-  if (svl == LOW && svr == LOW){
-    stop();
-  }
-  linetrack = false;
-  delay(1000);}
-
-void loop() {
-  // put your main code here, to run repeatedly
-  // int val = digitalRead(buttonPin); // read input value
-  LeftMotor->setSpeed(150);
-  RightMotor->setSpeed(150);
-  // if (val==HIGH){
-  //   Serial.print("ON");
-  //   initialise();
-  //   Serial.println("RUN");
-  // }
- 
-  while (linetrack==1){
-    linetracking();
-    }
-}
-
-//TIME DELAY FUNCTION
-void time_delay(){
-  unsigned long previousMillis = 0; //store time for second event
-  const long interval = 1000; //interval for second event
-  unsigned long currentMillis = millis(); //conditional that checks whether 2 seconds have passed since last event
-  if (currentMillis - previousMillis >= interval) {
-    previousMillis = millis();
-    //execute a piece of code, every *2 seconds*
-   }
-}
 
 //1ST BLOCK
 void first_block(){
   setSourceAndEnd(0,3);
-  initialise_dijkstra();
   dijkstra();
-  display();
-  // node01();
-  // node12();
-  // node23();
+  pathnode();
+  reset();
 }
 
 //2ND BLOCK
 void second_block(){
   setSourceAndEnd(0,11);
-  initialise_dijkstra();
   dijkstra();
-  display();
+  pathnode();
+  reset();
 }
