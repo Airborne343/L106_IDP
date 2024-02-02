@@ -6,15 +6,17 @@ int i = 0;
 
 void node01(){
   initialise();
+  delay(1000);
+  Serial.println("linetrack");
   linetrack = true;
-  if (svvl==HIGH && svvr == HIGH){
+  if (svvl==HIGH && svvr == HIGH ){
     stop();
   }
   linetrack = false;
   delay(1000);
 }
 void node10(){
-  if (path[i-1] == 2){
+  if (path[i+1] == 2){
     right90();
     linetrack = true;
     if (svvl==HIGH && svvr == HIGH){
@@ -25,7 +27,7 @@ void node10(){
     delay(1000);
   }
 
-  else if (path[i-1] == 6){
+  else if (path[i+1] == 6){
     left90();
     linetrack = true;
     if (svvl==HIGH && svvr == HIGH){
@@ -37,7 +39,7 @@ void node10(){
   } 
 }
 void node12(){
-  if (path[i-1] == 0){
+  if (path[i+1] == 0){
     left90();
     linetrack = true;
     if (svvr == HIGH){
@@ -47,7 +49,7 @@ void node12(){
     delay(1000);
   }
   
-  else if (path[i-1] == 6){
+  else if (path[i+1] == 6){
     linetrack = true;
     if (svvr == HIGH){
       stop();
@@ -57,7 +59,7 @@ void node12(){
   }
 }
 void node16(){
-  if (path[i-1] == 0){
+  if (path[i+1] == 0){
     right90();
     linetrack = true;
     if (svvl==HIGH && svvr == HIGH){
@@ -67,7 +69,7 @@ void node16(){
     delay(1000);
   }
 
-  if (path[i-1] == 2){
+  if (path[i+1] == 2){
     linetrack = true;
     if (svvl==HIGH && svvr == HIGH){
       stop();
@@ -77,7 +79,7 @@ void node16(){
   }
 }
 void node21(){
-  if (path[i-1] == 3){
+  if (path[i+1] == 3){
     right90();
     linetrack = true;
     if(svvr == HIGH){
@@ -87,7 +89,7 @@ void node21(){
     delay(1000);
   }
 
-  else if (path[i-1] == 4){
+  else if (path[i+1] == 4){
     linetrack = true;
     if(svvr == HIGH){
       stop();
@@ -97,7 +99,7 @@ void node21(){
   }
 }
 void node23(){
-  if (path[i-1] == 1){
+  if (path[i+1] == 1){
     right90();
     linetrack = true;
     if (svl == LOW && svr == LOW){
@@ -106,7 +108,7 @@ void node23(){
     linetrack = false;
     delay(1000);}
   
-  else if (path[i-1] == 4){
+  else if (path[i+1] == 4){
     left90();
     linetrack = true;
     if (svl == LOW && svr == LOW){
@@ -118,7 +120,7 @@ void node23(){
     //ADD BLOCKDETECTION
 }
 void node24(){
-  if (path[i-1] == 1){
+  if (path[i+1] == 1){
   linetrack = true;
   if (svvl == HIGH && svvr == HIGH){
     stop();
@@ -126,7 +128,7 @@ void node24(){
   linetrack = false;
   delay(1000);}
 
-  else if (path[i-1] == 3){
+  else if (path[i+1] == 3){
   left90();
   linetrack = true;
   if (svvl == HIGH && svvr == HIGH){
@@ -144,7 +146,7 @@ void node32(){
   delay(1000);
 }
 void node42(){
-  if (path[i-1] == 5){
+  if (path[i+1] == 5){
     right90();
     linetrack = true;
     if (svvl == HIGH){
@@ -153,7 +155,7 @@ void node42(){
     linetrack = false;
     delay(1000);}
 
-  else if (path[i-1] == 8){
+  else if (path[i+1] == 8){
     left90();
     linetrack = true;
     if (svvl == HIGH){
@@ -163,7 +165,7 @@ void node42(){
     delay(1000);}
 }
 // void node45(){
-//   if (path[i-1] == 2){
+//   if (path[i+1] == 2){
 //     left90();
 //     linetrack
 //   }
@@ -192,133 +194,133 @@ void node42(){
 // void node1312(){}
 
 void pathnode(){
-  for (int i = pathLength - 1; i >= 0; i--) {
-    if (path[i] == 0 && path[i+1] == 1){
+  int array_size = sizeof(path)/sizeof(path[0]);
+  for (int i = array_size - 1; i>=0; i--) {
+    if (path[i] == 0 && path[i-1] == 1){
     node01();
-    Serial.println("Node 01")
   }
   
-  else if (path[i] == 1 && path[i+1] == 0){
+  else if (path[i] == 1 && path[i-1] == 0){
     node10();
   }
 
-  else if (path[i] == 1 && path[i+1] == 2){
+  else if (path[i] == 1 && path[i-1] == 2){
     node12();
   }
 
-  else if (path[i] == 1 && path[i+1] == 6){
+  else if (path[i] == 1 && path[i-1] == 6){
     node16();
   }
 
-  else if (path[i] == 2 && path[i+1] == 1){
+  else if (path[i] == 2 && path[i-1] == 1){
     node21();
   }
 
-  else if (path[i] == 2 && path[i+1] == 3){
+  else if (path[i] == 2 && path[i-1] == 3){
     node23();
   }
 
-  else if (path[i] == 2 && path[i+1] == 4){
+  else if (path[i] == 2 && path[i-1] == 4){
     node24();
   }
 
-  else if (path[i] == 3 && path[i+1] == 2){
+  else if (path[i] == 3 && path[i-1] == 2){
     node32();
   }
 
-  else if (path[i] == 4 && path[i+1] == 2){
+  else if (path[i] == 4 && path[i-1] == 2){
     node42();
   }
 
-  // else if (path[i] == 4 && path[i+1] == 5){
+  // else if (path[i] == 4 && path[i-1] == 5){
   //   node45();
   // }
 
-  // else if (path[i] == 4 && path[i+1] == 8){
+  // else if (path[i] == 4 && path[i-1] == 8){
   //   node48();
   // }
 
-  // else if (path[i] == 5 && path[i+1] == 4){
+  // else if (path[i] == 5 && path[i-1] == 4){
   //   node54();
   // }
 
-  // else if (path[i] == 6 && path[i+1] == 1){
+  // else if (path[i] == 6 && path[i-1] == 1){
   //   node61();
   // }
 
-  // else if (path[i] == 6 && path[i+1] == 7){
+  // else if (path[i] == 6 && path[i-1] == 7){
   //   node67();
   // }
 
-  // else if (path[i] == 6 && path[i+1] == 9){
+  // else if (path[i] == 6 && path[i-1] == 9){
   //   node69();
   // }
 
-  // else if (path[i] == 7 && path[i+1] == 6){
+  // else if (path[i] == 7 && path[i-1] == 6){
   //   node76();
   // }
 
-  // else if (path[i] == 8 && path[i+1] == 4){
+  // else if (path[i] == 8 && path[i-1] == 4){
   //   node84();
   // }
 
-  // else if (path[i] == 8 && path[i+1] == 12){
+  // else if (path[i] == 8 && path[i-1] == 12){
   //   node812();
   // }
 
-  // else if (path[i] == 8 && path[i+1] == 13){
+  // else if (path[i] == 8 && path[i-1] == 13){
   //   node813();
   // }
 
-  // else if (path[i] == 9 && path[i+1] == 6){
+  // else if (path[i] == 9 && path[i-1] == 6){
   //   node96();
   // }
 
-  // else if (path[i] == 9 && path[i+1] == 10){
+  // else if (path[i] == 9 && path[i-1] == 10){
   //   node910();
   // }
 
-  // else if (path[i] == 9 && path[i+1] == 13){
+  // else if (path[i] == 9 && path[i-1] == 13){
   //   node913();
   // }
 
-  // else if (path[i] == 10 && path[i+1] == 9){
+  // else if (path[i] == 10 && path[i-1] == 9){
   //   node109();
   // }
 
-  // else if (path[i] == 10 && path[i+1] == 11){
+  // else if (path[i] == 10 && path[i-1] == 11){
   //   node1011();
   // }
 
-  // else if (path[i] == 10 && path[i+1] == 12){
+  // else if (path[i] == 10 && path[i-1] == 12){
   //   node1012();
   // }
 
-  // else if (path[i] == 11 && path[i+1] == 10){
+  // else if (path[i] == 11 && path[i-1] == 10){
   //   node1110();
   // }
 
-  // else if (path[i] == 12 && path[i+1] == 8){
+  // else if (path[i] == 12 && path[i-1] == 8){
   //   node128();
   // }
 
-  // else if (path[i] == 12 && path[i+1] == 10){
+  // else if (path[i] == 12 && path[i-1] == 10){
   //   node1210();
   // }
 
-  // else if (path[i] == 12 && path[i+1] == 13){
+  // else if (path[i] == 12 && path[i-1] == 13){
   //   node1213();
   // }
 
-  // else if (path[i] == 13 && path[i+1] == 8){
+  // else if (path[i] == 13 && path[i-1] == 8){
   //   node138();
   // }
 
-  // else if (path[i] == 13 && path[i+1] == 9){
+  // else if (path[i] == 13 && path[i-1] == 9){
   //   node139();
   // }
 
-  // else if (path[i] == 13 && path[i+1] == 12){
+  // else if (path[i] == 13 && path[i-1] == 12){
   //   node1312();
   // }
 }
