@@ -45,7 +45,7 @@ int getNearestNode() {
   }
   return minnode;}
 
-void dijkstra() {
+void dijkstra_algorithm() {
   for (int i = 0; i < V; i++) {
     int nearest = getNearestNode();
     visited[nearest] = true;
@@ -84,3 +84,17 @@ void display() {
     }
     Serial.println();
     }
+
+void reset() {
+  for (int i = 0; i < V; i++) {
+    dist[i] = INF;
+    visited[i] = false;
+    parent[i] = i;
+  }
+}
+
+void dijkstra(){
+  initialise_dijkstra();
+  dijkstra_algorithm();
+  display();
+}
