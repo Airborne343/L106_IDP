@@ -31,19 +31,16 @@ void setup() {
 
 //1ST BLOCK
 void first_block(){
-  setSourceAndEnd(6,13);
-  initialise_dijkstra();
+  setSourceAndEnd(0,3);
   dijkstra();
-  display();
-  node01();
-  node12();
-  node23();
+  pathnode();
+  reset();
 }
 
 //2ND BLOCK
 void second_block(){
   setSourceAndEnd(0,11);
-  initialise_dijkstra();
   dijkstra();
-  display();
+  pathnode();
+  reset();
 }
