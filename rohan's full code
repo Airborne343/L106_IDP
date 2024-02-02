@@ -18,10 +18,10 @@ void setup() {
   pinMode(sr,INPUT);
   LeftMotor->setSpeed(motorspeed);
   RightMotor->setSpeed(motorspeed);
-  delay(15000);
   int val = digitalRead(buttonPin); // read input value
+  delay(10000);
   first_block();
-  second_block();
+  // second_block();
   }
 
 
