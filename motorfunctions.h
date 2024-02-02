@@ -27,6 +27,8 @@ int tdelay=2;
 void forward()
  {
   //adjust the speed here if needed
+  LeftMotor->setSpeed(255);
+  RightMotor->setSpeed(255);
   LeftMotor->run(FORWARD);
   RightMotor->run(FORWARD);
   Serial.println("FORWARD");
@@ -43,7 +45,7 @@ void backward()
 
 void right() 
  {
-  LeftMotor->setSpeed(225);
+  LeftMotor->setSpeed(255);
   LeftMotor->run(FORWARD);
   RightMotor->setSpeed(25);
   RightMotor->run(FORWARD);
@@ -64,39 +66,50 @@ void left()
 
 void right90() //turn 90 degrees
  {
-  //unsigned long current_time = millis(); 
-  // Serial.println(current_time);
-  // int interval = 2000;
-  // while((millis()-current_time) < interval){
-  // Serial.println(millis());
-  Serial.println("RIGHT90");
- 
+
+  Serial.println("RIGHT90"); 
+  forward();
+  delay(250);
     RightMotor->setSpeed(150);
     LeftMotor->setSpeed(150);
     LeftMotor->run(FORWARD);
     RightMotor->run(BACKWARD);
-    delay(1300);
+    delay(200);
+  while(svl==LOW){
+  Serial.println("INSIDEWHILELOOP");
+   LeftMotor->run(FORWARD);
+    RightMotor->run(BACKWARD);
+  svl=digitalRead(sl);
+ }
+  delay(200);
   }
   
 
 void left90() //turn 90 degrees
  {
   Serial.println("LEFT90");
-  //forward();
-  //delay(500);
+  forward();
+  delay(250);
   RightMotor->setSpeed(150);
   LeftMotor->setSpeed(150);
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
-    delay(1300);
+  delay(200);
+  while(svr==LOW){
+  Serial.println("INSIDEWHILELOOP");
+  LeftMotor->run(BACKWARD);
+  RightMotor->run(FORWARD);
+  svr=digitalRead(sr);
+ }
+  //delay(1000);
   }
 
 
 void backright() 
  {
-  LeftMotor->setSpeed(225);
+  LeftMotor->setSpeed(155);
   LeftMotor->run(BACKWARD);
-  RightMotor->setSpeed(25);
+  RightMotor->setSpeed(100);
   RightMotor->run(BACKWARD);
   Serial.println("BACKRIGHT");
   delay(tdelay);
@@ -105,9 +118,9 @@ void backright()
 
 void backleft() 
  {
-  RightMotor->setSpeed(225);
+  RightMotor->setSpeed(155);
   RightMotor->run(BACKWARD);
-  LeftMotor->setSpeed(25);
+  LeftMotor->setSpeed(100);
   LeftMotor->run(BACKWARD);
   Serial.println("BACKLEFT");
   delay(tdelay); 
@@ -141,7 +154,7 @@ void backwardlinetracking()
  svr=digitalRead(sr);
  svvr=digitalRead(ssr);
  svvl=digitalRead(ssl); 
-  if(svl==LOW && svr==LOW)
+  if(svl==HIGH && svr==HIGH)
   {
   //backward(); 
   //delay(tdelay);
@@ -154,7 +167,7 @@ void backwardlinetracking()
    { 
   backright(); 
   }
-  else if(svl==HIGH && svr==HIGH)
+  else if(svl==LOW && svr==LOW)
    {
   backward();
   }
