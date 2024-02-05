@@ -5,6 +5,12 @@ float dist_t1;
 float sensity_t1; 
 float dist_t3;
 float sensity_t3, dist_t2, sensity_t2, dist_t ;// define variables
+float dist_t4;
+float sensity_t4;
+float dist_t5;
+float sensity_t5;
+float dist_t6;
+float sensity_t6;   
 bool Soft = false; //define block
 
 float ultrasensor_reading(){
@@ -18,15 +24,24 @@ delay(10);
 sensity_t3 = analogRead(sensityPin);
 dist_t3 = sensity_t3 * MAX_RANG / ADC_SOLUTION;//
 delay(10);
+sensity_t4 = analogRead(sensityPin);
+dist_t4 = sensity_t4 * MAX_RANG / ADC_SOLUTION;//
+delay(10);
+sensity_t5 = analogRead(sensityPin);
+dist_t5 = sensity_t5 * MAX_RANG / ADC_SOLUTION;//
+delay(10);
+sensity_t6 = analogRead(sensityPin);
+dist_t6 = sensity_t6 * MAX_RANG / ADC_SOLUTION;//
+delay(10);
 
-dist_t = (dist_t1+dist_t2+dist_t3)/3;
+dist_t = (dist_t1+dist_t2+dist_t3+dist_t4+dist_t5+dist_t6)/3;
 Serial.println(dist_t);
 return dist_t;
 
 }
 
 void ultrasensor(float distance) {
-if(1<distance && distance< 5.6)
+if(1<distance && distance< 5.5)
   {
     Serial.println("hard");
     Serial.println(distance);
