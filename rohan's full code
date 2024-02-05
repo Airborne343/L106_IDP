@@ -19,7 +19,7 @@ void setup() {
   LeftMotor->setSpeed(motorspeed);
   RightMotor->setSpeed(motorspeed);
   int val = digitalRead(buttonPin); // read input value
-  delay(10000);
+  delay(3000);
   first_block();
   // second_block();
   }
