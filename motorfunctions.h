@@ -1,163 +1,338 @@
-#include <Adafruit_MotorShield.h>
-#include <Servo.h>
+#include "dijkstra.h"
+#include "linetracking_timedelay.h"
+//NOTE TO SELF: VOID NODES WHICH MIGHT NEED CHANGE -> 23, 32, 45, 67...
+int array_size = 0;
+int i =0;
 
-Servo myservo; 
-
-int ServoPin = 10;
-int pos = 0; // variable to store the servo position
-int sl=6;   //sensor left
-int sr=7;  //sensor right
-int ssr=8;   //outer sensor right
-int ssl=9;   //outer sensor left
-int svr=0; //sensor value right
-int svl=0; //sensor value left
-int svvr=0; //outer sensor value right
-int svvl=0; //outer sensor value left
-int servoangle = 180; //angle it turns to grab the block
-
-
-// Create the motor shield object with the default I2C address
-Adafruit_MotorShield AFMS = Adafruit_MotorShield();
-// Select which 'port' M1, M2, M3 or M4. In this case, M1
-Adafruit_DCMotor *LeftMotor = AFMS.getMotor(4);
-Adafruit_DCMotor *RightMotor = AFMS.getMotor(1);
-
-int tdelay=2; 
-
-void forward()
- {
-  //adjust the speed here if needed
-  LeftMotor->setSpeed(120);
-  RightMotor->setSpeed(150);
-  LeftMotor->run(FORWARD);
-  RightMotor->run(FORWARD);
-  Serial.println("FORWARD");
-  delay(tdelay);
- } 
-
-void backward()
-   {
-    LeftMotor->setSpeed(100);
-    RightMotor->setSpeed(100);
-    LeftMotor->run(BACKWARD);
-    RightMotor->run(BACKWARD);
-    Serial.println("BACKWARD");
-    delay(tdelay);
-   }
-
-void right() 
- {
-  LeftMotor->setSpeed(255);
-  LeftMotor->run(FORWARD);
-  RightMotor->setSpeed(25);
-  RightMotor->run(FORWARD);
-  Serial.println("RIGHT");
-  delay(tdelay);
+void node01(){
+  initialise();
+  linetrack = true;
+  while (linetrack == true){
+    svr=digitalRead(sr);
+    svl=digitalRead(sl);
+    svvr=digitalRead(ssr);
+    svvl=digitalRead(ssl);
+    if (svvl==HIGH && svvr == HIGH ){
+      stop();
+      Serial.println("Stop 01");
+      linetrack = false;
+    }
   }
-
-
-void left() 
- {
-  RightMotor->setSpeed(225);
-  RightMotor->run(FORWARD);
-  LeftMotor->setSpeed(25);
-  LeftMotor->run(FORWARD);
-  Serial.println("LEFT");
-  delay(tdelay); 
-}  
-
-void right90() //turn 90 degrees
- {
-
-  Serial.println("RIGHT90"); 
-  forward();
-  delay(250);
-    RightMotor->setSpeed(150);
-    LeftMotor->setSpeed(150);
-    LeftMotor->run(FORWARD);
-    RightMotor->run(BACKWARD);
-    delay(1250);
-  }
+  delay(1000);
+}
+void node10(){
   
-
-void left90() //turn 90 degrees
- {
-  Serial.println("LEFT90");
-  forward();
-  delay(250);
-  RightMotor->setSpeed(150);
-  LeftMotor->setSpeed(150);
-  LeftMotor->run(BACKWARD);
-  RightMotor->run(FORWARD);
-  delay(1250);
- }
-  //delay(1000);
-
-
-void backright() 
- {
-  LeftMotor->setSpeed(155);
-  LeftMotor->run(BACKWARD);
-  RightMotor->setSpeed(100);
-  RightMotor->run(BACKWARD);
-  Serial.println("BACKRIGHT");
-  delay(tdelay);
+  if (path[i+1] == 2){
+    right90();
+    linetrack = true;
+    if (svvl==HIGH && svvr == HIGH){
+      stop();
+    }
+    linetrack = false;
+    forward();
+    delay(1000);
   }
 
+  else if (path[i+1] == 6){
+    left90();
+    linetrack = true;
+    if (svvl==HIGH && svvr == HIGH){
+      stop();
+    }
+    linetrack = false;
+    forward();
+    delay(1000);
+  } 
+}
+void node12(){
+  // if (path[i+1] == 0){
+    Serial.println("Node 12");
+    forward();
+    delay(700);
+    left90();
+    linetrack = true;
+    if (svvr == HIGH){
+      stop();
+    }
+    linetrack = false;
+    delay(1000);
+  // }
+  
+  // else if (path[i+1] == 6){
+  //   linetrack = true;
+  //   if (svvr == HIGH){
+  //     stop();
+  //   }
+  //   linetrack = false;
+  //   delay(1000);
+  // }
+}
+void node16(){
+  if (path[i+1] == 0){
+    right90();
+    linetrack = true;
+    if (svvl==HIGH && svvr == HIGH){
+      stop();
+    }
+    linetrack = false;
+    delay(1000);
+  }
 
-void backleft() 
- {
-  RightMotor->setSpeed(155);
-  RightMotor->run(BACKWARD);
-  LeftMotor->setSpeed(100);
-  LeftMotor->run(BACKWARD);
-  Serial.println("BACKLEFT");
-  delay(tdelay); 
-}  
-
-
-void stop()
- {
-  LeftMotor->run(RELEASE);
-  RightMotor->run(RELEASE);
- }
-
-void grab()
-{
-   for (pos = 0; pos <= servoangle; pos += 1) { // goes from 0 degrees to 180 degrees
-  // in steps of 1 degree
-  myservo.write(pos); // tell servo to go to position in variable 'pos'
-  delay(15); // waits 15 ms for the servo to reach the position
+  if (path[i+1] == 2){
+    linetrack = true;
+    if (svvl==HIGH && svvr == HIGH){
+      stop();
+    }
+    linetrack = false;
+    delay(1000);
   }
 }
+void node21(){
+  if (path[i+1] == 3){
+    right90();
+    linetrack = true;
+    if(svvr == HIGH){
+      stop();
+    }
+    linetrack = false;
+    delay(1000);
+  }
 
-
-void release()
-{
-  myservo.write(0); // tell servo to release to 0 degrees
-  }
-  
-void backwardlinetracking()
-{
- svl=digitalRead(sl);
- svr=digitalRead(sr);
- svvr=digitalRead(ssr);
- svvl=digitalRead(ssl); 
-  if(svl==HIGH && svr==HIGH)
-  {
-  //backward(); 
-  //delay(tdelay);
-  }
-  else if(svl==HIGH   && svr==LOW)
-  {
-  backleft(); 
-  }
-  else if(svl==LOW && svr==HIGH)
-   { 
-  backright(); 
-  }
-  else if(svl==LOW && svr==LOW)
-   {
-  backward();
+  else if (path[i+1] == 4){
+    linetrack = true;
+    if(svvr == HIGH){
+      stop();
+    }
+    linetrack = false;
+    delay(1000);
   }
 }
+void node23(){
+  // if (path[i+1] == 1){
+    forward();
+    delay(700);
+    right90();
+    linetrack = true;
+    if (svl == LOW && svr == LOW){
+      stop();
+    }
+    linetrack = false;
+    delay(1000);}
+  
+  // else if (path[i+1] == 4){
+  //   left90();
+  //   linetrack = true;
+  //   if (svl == LOW && svr == LOW){
+  //     stop();
+  //   }
+  //   linetrack = false;
+  //   delay(1000);}
+
+    //ADD BLOCKDETECTION
+void node24(){
+  if (path[i+1] == 1){
+  linetrack = true;
+  if (svvl == HIGH && svvr == HIGH){
+    stop();
+  }
+  linetrack = false;
+  delay(1000);}
+
+  else if (path[i+1] == 3){
+  left90();
+  linetrack = true;
+  if (svvl == HIGH && svvr == HIGH){
+    stop();
+  }
+  linetrack = false;
+  delay(1000);}
+}
+void node32(){
+  //backlinetrack?
+  // backwards();
+  if (svvl == HIGH && svvr == HIGH){
+    stop();
+  }
+  delay(1000);
+}
+void node42(){
+  if (path[i+1] == 5){
+    right90();
+    linetrack = true;
+    if (svvl == HIGH){
+      stop();
+    }
+    linetrack = false;
+    delay(1000);}
+
+  else if (path[i+1] == 8){
+    left90();
+    linetrack = true;
+    if (svvl == HIGH){
+      stop();
+    }
+    linetrack = false;
+    delay(1000);}
+}
+// void node45(){
+//   if (path[i+1] == 2){
+//     left90();
+//     linetrack
+//   }
+// }
+// void node48(){}
+// void node54(){}
+// void node61(){}
+// void node67(){}
+// void node69(){}
+// void node76(){}
+// void node84(){}
+// void node812(){}
+// void node813(){}
+// void node96(){}
+// void node910(){}
+// void node913(){}
+// void node109(){}
+// void node1011(){}
+// void node1012(){}
+// void node1110(){}
+// void node128(){}
+// void node1210(){}
+// void node1213(){}
+// void node138(){}
+// void node139(){}
+// void node1312(){}
+
+int* pathnode(){
+  int array_size = sizeof(path)/sizeof(path[0]);
+  for (int i = array_size - 1; i>=0; i--) {
+    if (path[i] == 0 && path[i-1] == 1){
+    node01();
+  }
+  
+  else if (path[i] == 1 && path[i-1] == 0){
+    node10();
+  }
+
+  else if (path[i] == 1 && path[i-1] == 2){
+    node12();
+  }
+
+  else if (path[i] == 1 && path[i-1] == 6){
+    node16();
+  }
+
+  else if (path[i] == 2 && path[i-1] == 1){
+    node21();
+  }
+
+  else if (path[i] == 2 && path[i-1] == 3){
+    node23();
+  }
+
+  else if (path[i] == 2 && path[i-1] == 4){
+    node24();
+  }
+
+  else if (path[i] == 3 && path[i-1] == 2){
+    node32();
+  }
+
+  else if (path[i] == 4 && path[i-1] == 2){
+    node42();
+  }
+
+  // else if (path[i] == 4 && path[i-1] == 5){
+  //   node45();
+  // }
+
+  // else if (path[i] == 4 && path[i-1] == 8){
+  //   node48();
+  // }
+
+  // else if (path[i] == 5 && path[i-1] == 4){
+  //   node54();
+  // }
+
+  // else if (path[i] == 6 && path[i-1] == 1){
+  //   node61();
+  // }
+
+  // else if (path[i] == 6 && path[i-1] == 7){
+  //   node67();
+  // }
+
+  // else if (path[i] == 6 && path[i-1] == 9){
+  //   node69();
+  // }
+
+  // else if (path[i] == 7 && path[i-1] == 6){
+  //   node76();
+  // }
+
+  // else if (path[i] == 8 && path[i-1] == 4){
+  //   node84();
+  // }
+
+  // else if (path[i] == 8 && path[i-1] == 12){
+  //   node812();
+  // }
+
+  // else if (path[i] == 8 && path[i-1] == 13){
+  //   node813();
+  // }
+
+  // else if (path[i] == 9 && path[i-1] == 6){
+  //   node96();
+  // }
+
+  // else if (path[i] == 9 && path[i-1] == 10){
+  //   node910();
+  // }
+
+  // else if (path[i] == 9 && path[i-1] == 13){
+  //   node913();
+  // }
+
+  // else if (path[i] == 10 && path[i-1] == 9){
+  //   node109();
+  // }
+
+  // else if (path[i] == 10 && path[i-1] == 11){
+  //   node1011();
+  // }
+
+  // else if (path[i] == 10 && path[i-1] == 12){
+  //   node1012();
+  // }
+
+  // else if (path[i] == 11 && path[i-1] == 10){
+  //   node1110();
+  // }
+
+  // else if (path[i] == 12 && path[i-1] == 8){
+  //   node128();
+  // }
+
+  // else if (path[i] == 12 && path[i-1] == 10){
+  //   node1210();
+  // }
+
+  // else if (path[i] == 12 && path[i-1] == 13){
+  //   node1213();
+  // }
+
+  // else if (path[i] == 13 && path[i-1] == 8){
+  //   node138();
+  // }
+
+  // else if (path[i] == 13 && path[i-1] == 9){
+  //   node139();
+  // }
+
+  // else if (path[i] == 13 && path[i-1] == 12){
+  //   node1312();
+  // }
+}
+  return i;
+  }
