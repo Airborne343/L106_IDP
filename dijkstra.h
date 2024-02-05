@@ -64,7 +64,6 @@ void display() {
   Serial.print(dist[end]);
   Serial.print("\t\t\t");
 
-  int path[V];
   int pathLength = 0;
   int currentNode = end;
 
