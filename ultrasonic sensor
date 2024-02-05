@@ -34,14 +34,6 @@ if(1<distance && distance< 5.6)
     //counter ++; //metal block detect so go to green 
     delay(500);
   }
-  // else if (6 <dist_t && dist_t < 9.5)   
-  //     {
-  //     Serial.println("soft soft");
-  //     Serial.println(dist_t);
-  //    Soft = true;
-  //    //counter += 2; //foam block detect so go to red
-  //    delay(500);
-  //    }
 else {
   Serial.println("soft");
   Serial.println(distance);

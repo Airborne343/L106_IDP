@@ -11,6 +11,7 @@ int ledPin=13;
 int motorspeed=150; //0-255       
 int counter = 0; //count the numbers of turn
 int t = 0;  //time taken in the junction
+int i =0;
 float sensity_t;
 
 void setup() {
@@ -106,6 +107,14 @@ void linetracking(){
     counterfunction();
   }
 
+  else if (counter==3 && (svvl==HIGH || svvr == HIGH)){
+    counterfunction();
+  }
+
+  else if (counter==4 && (svvl==HIGH || svvr == HIGH)){
+    counterfunction();
+  }
+
   
   else if(svl==HIGH   && svr==LOW)
   {
@@ -162,19 +171,21 @@ void counterfunction(){
  }
  counter++;
   }
- else if (counter==2){
+
+
+ else if (counter==2){ //Sensing and detecting the block
     stop();
-    ultrasensor(ultrasensor_reading()); //Sensing and detecting the block
+    ultrasensor(ultrasensor_reading()); 
     svvl = LOW;
     svvr = LOW;
     while(svvl == LOW && svvr == LOW){
       Serial.println("BACKWHILELOOP");
-      backwardlinetracking();
+      backwardlinetracking();     //Backward linetracking
       svvr=digitalRead(ssr);
       svvl=digitalRead(ssl);
     }
     if (SOFT == true) {
-  Serial.println("LEFT90");
+  Serial.println("LEFT90");    //TURN LEFT to the way back to the zone if SOFT
 
   RightMotor->setSpeed(150);
   LeftMotor->setSpeed(150);
@@ -188,9 +199,8 @@ void counterfunction(){
   svr=digitalRead(sr);
   }
     }
-    else {
-    Serial.println("RIGHT90"); 
-
+    else {                        //Turn RIGHT to the way back to the zone if HARD
+  Serial.println("RIGHT90"); 
   RightMotor->setSpeed(150);
   LeftMotor->setSpeed(150);
   LeftMotor->run(FORWARD);
@@ -208,54 +218,91 @@ counter ++;
 
 
 
-  else if (counter == 3) //moving into green zone to put the first block
+  else if (counter == 3) //moving into junction of the putting zone
   {
     if (SOFT == true) {
-      left90();
-      forward();
-      delay(1000);
-      release();
+  Serial.println("LEFT90");    //TURN LEFT to the way back to the zone if SOFT
+  RightMotor->setSpeed(150);
+  LeftMotor->setSpeed(150);
+  LeftMotor->run(BACKWARD);
+  RightMotor->run(FORWARD);
+  delay(1000);
+  while(svr==LOW){
+  Serial.println("INSIDEWHILELOOP");
+  LeftMotor->run(BACKWARD);
+  RightMotor->run(FORWARD);
+  svr=digitalRead(sr);
+  }
     }
-    else {
-      right90();
-      forward();
-      delay(1000);
-      release();
-    }
-    counter ++;
+  }
 
-    //blablabla
+  else {                    //TURN RIGHT to the way back to the zone if HARD
+  Serial.println("RIGHT90"); 
+  forward();
+  delay(500);
+  RightMotor->setSpeed(150);
+  LeftMotor->setSpeed(150);
+  LeftMotor->run(FORWARD);
+  RightMotor->run(BACKWARD);
+  delay(1000);
+  while(svl==LOW){
+    Serial.println("INSIDEWHILELOOP");
+    LeftMotor->run(FORWARD);
+    RightMotor->run(BACKWARD);
+    svl=digitalRead(sl);
+ }
   }
-  else if (counter == 4)
+  counter++;
+
+
+  else if (counter==4)    //Putting the block and backtracking until the second line
   {
-    backwardlinetracking();
-    counter ++;
-  }
-  else if (counter == 6)
-  {
-    backwardlinetracking();
-    counter ++;
-  }
-  else if (counter == 7)
-  {
+    release();
+    svvl = LOW;
+    svvr = LOW;
+    while(svvl == LOW && svvr == LOW && i<2){
+      Serial.println("BACKWHILELOOP");
+      backwardlinetracking();     //Backward linetracking
+      svvr=digitalRead(ssr);
+      svvl=digitalRead(ssl);
+      if (svvl == HIGH || svvr == HIGH){
+        i+=1
+      }
+    }
     if (SOFT == true) {
-      left90();
+      Serial.println("LEFT90");    //TURN LEFT to the way to grab the second block
+      RightMotor->setSpeed(150);
+      LeftMotor->setSpeed(150);
+      LeftMotor->run(BACKWARD);
+      RightMotor->run(FORWARD);
+      delay(1000);
+      while(svr==LOW){
+      Serial.println("INSIDEWHILELOOP");
+      LeftMotor->run(BACKWARD);
+      RightMotor->run(FORWARD);
+      svr=digitalRead(sr);
+      }
     }
-    else {
-      right90();
+
+  else {                    //TURN RIGHT to the way to grab the second block
+    Serial.println("RIGHT90"); 
+    forward();
+    delay(500);
+    RightMotor->setSpeed(150);
+    LeftMotor->setSpeed(150);
+    LeftMotor->run(FORWARD);
+    RightMotor->run(BACKWARD);
+    delay(1000);
+    while(svl==LOW){
+      Serial.println("INSIDEWHILELOOP");
+      LeftMotor->run(FORWARD);
+      RightMotor->run(BACKWARD);
+      svl=digitalRead(sl);
     }
-    counter ++;
   }
-  else if (counter == 8)
-  {
-    if (SOFT == true) {
-      right90();
-    }
-    else {
-      left90();
-    }
-    counter ++;
   }
+  counter ++;
   }
+  
 
 
