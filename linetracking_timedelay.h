@@ -14,7 +14,7 @@ void initialise(){
   LeftMotor->run(FORWARD);
   RightMotor->setSpeed(200);
   RightMotor->run(FORWARD);
-  delay(200);
+  delay(1500);
   //need to add a release here? myMotor->run(RELEASE);
 }
 
