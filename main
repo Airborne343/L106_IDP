@@ -1,9 +1,8 @@
 #include <Adafruit_MotorShield.h>
 #include "motorfunctions.h"
+#include "ultrasensor.h"
 #define MAX_RANG (520)//the max measurement value of the module is 520cm(a little bit longerthan effective max range)
 #define ADC_SOLUTION (1023.0)//ADC accuracy of Arduino UNO is 10bit
-
-int sensityPin = A0; // select the input pin
 
 bool linetrack = false;
 bool SOFT = false;
@@ -13,7 +12,6 @@ int motorspeed=150; //0-255
 int counter = 0; //count the numbers of turn
 int t = 0;  //time taken in the junction
 float sensity_t;
-float dist_t;
 
 void setup() {
   // put your setup code here, to run once:
@@ -58,11 +56,11 @@ void loop() {
 void initialise(){
   //move forward for 2 seconds
   Serial.println("INITIALISE");
-  LeftMotor->setSpeed(150);
+  LeftMotor->setSpeed(200);
   LeftMotor->run(FORWARD);
-  RightMotor->setSpeed(150);
+  RightMotor->setSpeed(200);
   RightMotor->run(FORWARD);
-  delay(500);
+  delay(200);
   linetrack = true;
   //need to add a release here? myMotor->run(RELEASE);
 }
@@ -80,38 +78,26 @@ void time_delay(){
 }
 //add
 
-//LINETRACKING FUNCTION
+//LINETRACKING FUNCTIONSERVO.h
 void linetracking(){
  svl=digitalRead(sl);
  svr=digitalRead(sr);
  svvr=digitalRead(ssr);
  svvl=digitalRead(ssl);
    
-  if(svl==LOW && svr==LOW)
+  if(svl==HIGH && svr==HIGH)
   {
   //backward(); 
   //delay(tdelay);
   }
 
 
-  else if (svvl==HIGH || svvr == HIGH)
+  else if (counter==0 && (svvl==HIGH || svvr == HIGH))
   {
     counterfunction();
     }
 
-
-  else if (counter==1 && svvr == HIGH)
-  {
-    counterfunction();
-    }
-
-  else if (counter==2 && ultrasensor_reading() <6){
-    counterfunction();
-  }
-
-  
-  
-  else if (counter==1 && svvr == HIGH)
+    else if (counter==1 && svvr == HIGH)
   {
     counterfunction();
     }
@@ -129,7 +115,7 @@ void linetracking(){
    { 
   right(); 
   }
-  else if(svl==HIGH && svr==HIGH)
+  else if(svl==LOW && svr==LOW)
    {
   forward();
   }
@@ -141,47 +127,86 @@ void counterfunction(){
   Serial.println(counter);
   if (counter == 0)
   {
+Serial.println("LEFT90");
     forward();
-    delay(200);
-    left90();
+    delay(500);
+    RightMotor->setSpeed(150);
+  LeftMotor->setSpeed(150);
+  LeftMotor->run(BACKWARD);
+  RightMotor->run(FORWARD);
+  delay(1000);
+  while(svr==LOW){
+  Serial.println("INSIDEWHILELOOP");
+  LeftMotor->run(BACKWARD);
+  RightMotor->run(FORWARD);
+  svr=digitalRead(sr);
+  }
     counter ++;
-    forward();
-    delay(200);
+    
   }
   else if (counter == 1)   //Moving into the junction
   {
   Serial.println("RIGHT90"); 
     forward();
-    delay(300);
-    right90();
-    forward();
-    delay(3000);
-    
-    while(t <= 3000){      // Do linetracking for 3 seconds
-      linetracking();
-      t++;
-    }
-    ultrasensor(); //Sensing and detecting the block
+    delay(500);
+    RightMotor->setSpeed(150);
+  LeftMotor->setSpeed(150);
+    LeftMotor->run(FORWARD);
+  RightMotor->run(BACKWARD);
+    delay(1000);
+  while(svl==LOW){
+  Serial.println("INSIDEWHILELOOP");
+   LeftMotor->run(FORWARD);
+    RightMotor->run(BACKWARD);
+  svl=digitalRead(sl);
+ }
+ counter++;
+  }
+    else if (counter==2){
+    stop();
+    ultrasensor(ultrasensor_reading()); //Sensing and detecting the block
     svvl = LOW;
     svvr = LOW;
     while(svvl == LOW && svvr == LOW){
+Serial.println("BACKWHILELOOP");
       backwardlinetracking();
       svvr=digitalRead(ssr);
       svvl=digitalRead(ssl);
     }
-counter ++;
-  }
+if (SOFT == true) {
+  Serial.println("LEFT90");
 
-  else if (counter == 2)   // Moving into red zone to put the first block
-    {
-      if (SOFT == true) {
-    left90();
+  RightMotor->setSpeed(150);
+  LeftMotor->setSpeed(150);
+  LeftMotor->run(BACKWARD);
+  RightMotor->run(FORWARD);
+  delay(1000);
+  while(svr==LOW){
+  Serial.println("INSIDEWHILELOOP");
+  LeftMotor->run(BACKWARD);
+  RightMotor->run(FORWARD);
+  svr=digitalRead(sr);
+  }
     }
     else {
-      right90();
+      Serial.println("RIGHT90"); 
+
+  RightMotor->setSpeed(150);
+  LeftMotor->setSpeed(150);
+  LeftMotor->run(FORWARD);
+  RightMotor->run(BACKWARD);
+  delay(1000);
+  while(svl==LOW){
+  Serial.println("INSIDEWHILELOOP");
+   LeftMotor->run(FORWARD);
+    RightMotor->run(BACKWARD);
+  svl=digitalRead(sl);
+ }
     }
     counter ++;
     }
+
+
 
   else if (counter == 3) //moving into green zone to put the first block
   {
@@ -211,51 +236,58 @@ counter ++;
     backwardlinetracking();
     counter ++;
   }
+
+  else if (counter == 5){
+    linetracking();
+    counter ++;
+  }
   else if (counter == 6)
   {
-    if (SOFT == true) {
-      left90();
+  if (SOFT == true) {
+  forward();
+  delay(250);
+  RightMotor->setSpeed(150);
+  LeftMotor->setSpeed(150);
+  LeftMotor->run(FORWARD);
+  RightMotor->run(BACKWARD);
+  delay(300);
+  while(svl==LOW){
+  Serial.println("INSIDEWHILELOOP");
+  LeftMotor->run(FORWARD);
+  RightMotor->run(BACKWARD);
+  svl=digitalRead(sl);
+ }
     }
     else {
-      right90();
+  Serial.println("LEFT90");
+  backward();
+  delay(250);
+  RightMotor->setSpeed(150);
+  LeftMotor->setSpeed(150);
+  LeftMotor->run(BACKWARD);
+  RightMotor->run(FORWARD);
+  delay(300);
+  while(svr==LOW){
+  Serial.println("INSIDEWHILELOOP");
+  LeftMotor->run(BACKWARD);
+  RightMotor->run(FORWARD);
+  svr=digitalRead(sr);
+ }
     }
     counter ++;
   }
-  else if (counter == 7)
+  else if (counter == 8)
   {
-    if (SOFT == true) {
-      right90();
+    stop();
+    ultrasensor(ultrasensor_reading()); //Sensing and detecting the block
+    svvl = LOW;
+    svvr = LOW;
+    while(svvl == LOW && svvr == LOW){
+    Serial.println("BACKWHILELOOP");
+      backwardlinetracking();
+      svvr=digitalRead(ssr);
+      svvl=digitalRead(ssl);
     }
-    else {
-      left90();
-    }
-    counter ++;
-  }
   }
 
-void ultrasensor() {
- // read the value from the sensor:
-sensity_t = analogRead(sensityPin);
-dist_t = sensity_t * MAX_RANG / ADC_SOLUTION;//
-
-if(1<dist_t && dist_t< 6)
-  {
-    Serial.println("metal");
-    Serial.println(dist_t);
-    SOFT = false;
-    counter ++; //metal block detect so go to green 
-    delay(500);
-  }
-else if (6 <dist_t && dist_t < 11)   
-    {
-    Serial.println("foam");
-    Serial.println(dist_t);
-    SOFT = true;
-    counter += 2; //foam block detect so go to red
-    delay(500);
-    }
-else {
-  delay(500);
-}
-delay(500);
 }
