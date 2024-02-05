@@ -27,8 +27,8 @@ int tdelay=2;
 void forward()
  {
   //adjust the speed here if needed
-  LeftMotor->setSpeed(255);
-  RightMotor->setSpeed(255);
+  LeftMotor->setSpeed(120);
+  RightMotor->setSpeed(150);
   LeftMotor->run(FORWARD);
   RightMotor->run(FORWARD);
   Serial.println("FORWARD");
@@ -37,6 +37,8 @@ void forward()
 
 void backward()
    {
+    LeftMotor->setSpeed(100);
+    RightMotor->setSpeed(100);
     LeftMotor->run(BACKWARD);
     RightMotor->run(BACKWARD);
     Serial.println("BACKWARD");
@@ -74,14 +76,7 @@ void right90() //turn 90 degrees
     LeftMotor->setSpeed(150);
     LeftMotor->run(FORWARD);
     RightMotor->run(BACKWARD);
-    delay(200);
-  while(svl==LOW){
-  Serial.println("INSIDEWHILELOOP");
-   LeftMotor->run(FORWARD);
-    RightMotor->run(BACKWARD);
-  svl=digitalRead(sl);
- }
-  delay(200);
+    delay(1250);
   }
   
 
@@ -94,15 +89,9 @@ void left90() //turn 90 degrees
   LeftMotor->setSpeed(150);
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
-  delay(200);
-  while(svr==LOW){
-  Serial.println("INSIDEWHILELOOP");
-  LeftMotor->run(BACKWARD);
-  RightMotor->run(FORWARD);
-  svr=digitalRead(sr);
+  delay(1250);
  }
   //delay(1000);
-  }
 
 
 void backright() 
