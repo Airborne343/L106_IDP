@@ -276,7 +276,7 @@ if (SOFT == true) {
     }
     counter ++;
   }
-  else if (counter == 8)
+  else if (counter == 7)
   {
     stop();
     ultrasensor(ultrasensor_reading()); //Sensing and detecting the block
