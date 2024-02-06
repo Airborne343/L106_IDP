@@ -1,10 +1,6 @@
 #include "dijkstra.h"
 #include "linetracking_timedelay.h"
-//NOTE TO SELF: VOID NODES WHICH MIGHT NEED CHANGE:
-//123 (pickup)
-//423 (pickup)
-//91011 (pickup)
-//121011 (pickup)
+// what is left: distance sensor to code the freezone area
 
 //Node 0 -> 1
 void node01(){
@@ -104,8 +100,9 @@ void node123(){
     stop();
   }
   linetrack = false;
-  ultrasensor();
-  //pickup
+  grab();
+  lift();
+  ultrasensor(ultrasensor_reading());
   delay(1000);
 }
 //Node 2 -> 3 (if the previous node was 4)
@@ -116,8 +113,9 @@ void node423(){
     stop();
   }
   linetrack = false;
-  ultrasensor();
-  //pickup
+  grab();
+  lift();
+  ultrasensor(ultrasensor_reading());
   delay(1000);
 }
 //Node 2 -> 4 (if the previous node was 3)
@@ -171,19 +169,25 @@ void node842(){
 void node245(){
   left90();
   linetrack = true;
-  if (distance < 7){
+  delay(3000);
+  if (ultrasensor_reading < 7){
     stop();
   }
   linetrack = false;
+  puttingdown();
+  release();
   delay(1000);
 }
 //Node 4 -> 5 (if the previous node was 8)
 void node845(){
   linetrack = true;
-  if (distance < 7){
+  delay(3000);
+  if (ultrasensor_reading < 7){
     stop();
   }
   linetrack = false;
+  puttingdown();
+  release();
   delay(1000);
 }
 //Node 4 -> 8 (if the previous node was 2)
@@ -243,19 +247,25 @@ void node961(){
 void node167(){
   right90();
   linetrack = true;
-  if (distance < 7){
+  delay(3000);
+  if (ultrasensor_reading < 7){
     stop();
   }
   linetrack = false;
+  puttingdown();
+  release();
   delay(1000);
 }
 //Node 6 -> 7 (if the previous node was 9)
 void node967(){
   linetrack = true;
-  if (distance < 7){
+  delay(3000);
+  if (ultrasensor_reading < 7){
     stop();
   }
   linetrack = false;
+  puttingdown();
+  release();
   delay(1000);
 }
 //Node 6 -> 9 (if the previous node was 1)
@@ -433,8 +443,9 @@ void node91011(){
     stop();
   }
   linetrack = false;
-  ultrasensor();
-  //pickup
+  grab();
+  lift();
+  ultrasensor(ultrasensor_reading());
   delay(1000);
 }
 //Node 10 -> 11 (if the previous node was 12) 
@@ -445,8 +456,9 @@ void node121011(){
     stop();
   }
   linetrack = false;
-  ultrasensor();
-  //pickup
+  grab();
+  lift();
+  ultrasensor(ultrasensor_reading());
   delay(1000);
 }
 //Node 10 -> 12 (if the previous node was 9) 
