@@ -1,11 +1,9 @@
 #include <Adafruit_MotorShield.h>
 #include "nodefunctions.h"
 
-int counter = 0; //count the numbers of turn
-
+int counter = 0; //helps the robot know where it is
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(9600);
   Serial.println("Setup");
   if (!AFMS.begin()) {         // create with the default frequency 1.6KHz
@@ -18,10 +16,9 @@ void setup() {
   pinMode(sr,INPUT);
   LeftMotor->setSpeed(motorspeed);
   RightMotor->setSpeed(motorspeed);
-  delay(15000);
   int val = digitalRead(buttonPin); // read input value
+  delay(3000);
   first_block();
-  second_block();
   }
 
 
@@ -31,12 +28,85 @@ void first_block(){
   dijkstra();
   pathnode();
   reset();
+
+  if (Soft == true){
+    setSourceAndEnd(3,5);
+    dijkstra();
+    pathnode();
+    reset();    
+  }
+
+  else if (Soft == false){
+    setSourceAndEnd(3,7);
+    dijkstra();
+    pathnode();
+    reset();
+    counter++   
+  }
+  second_block();
 }
 
 //2ND BLOCK
 void second_block(){
-  setSourceAndEnd(0,11);
-  dijkstra();
-  pathnode();
-  reset();
+  if (counter == 0){
+    setSourceAndEnd(5,11);
+    dijkstra();
+    pathnode();
+    reset();
+
+    if (Soft == true){
+      setSourceAndEnd(11,5);
+      dijkstra();
+      pathnode();
+      reset();
+    }
+
+    else if (Soft == false){
+      setSourceAndEnd(11,7);
+      dijkstra();
+      pathnode();
+      reset();
+      counter++
+    }
+  }
+
+  else if (counter == 1){
+    counter--
+    setSourceAndEnd(7,11);
+    dijkstra();
+    pathnode();
+    reset();
+
+    if (Soft == true){
+      setSourceAndEnd(11,5);
+      dijkstra();
+      pathnode();
+      reset();
+    }
+
+    else if (Soft == false){
+      setSourceAndEnd(11,7);
+      dijkstra();
+      pathnode();
+      reset();
+      counter++
+  }
+  third_block();
+}
+
+//3RD BLOCK
+void third_block(){
+  if (counter == 0){
+    setSourceAndEnd(5,12);
+    dijkstra();
+    pathnode();
+    reset();
+  }
+
+  else if (counter == 1){
+    setSourceAndEnd(7,12);
+    dijkstra();
+    pathnode();
+    reset();
+  }
 }
