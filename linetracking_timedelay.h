@@ -1,20 +1,6 @@
 //LINETRACKING FUNCTION
 #include <Adafruit_MotorShield.h>
-#include "motorfunctions.h"
-
-bool linetrack = false;
-int sl = 6;
-int sr = 7;
-int ssr = 8;
-int ssl = 9;
-int svr = 0;
-int svl = 0;
-int svvr = 0;
-int svvl = 0;
-int servoangle = 100;
-int buttonPin = 4;
-int led=13;
-int motorspeed=150; //0-255        
+#include "motorfunctions.h"      
 
 void initialise(){
   //move forward for 2 seconds
