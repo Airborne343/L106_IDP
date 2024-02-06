@@ -58,32 +58,30 @@ void dijkstra_algorithm() {
   }}
 
 void display() {
-    Serial.println("Node:\t\t\tCost :\t\t\tPath:");
-    Serial.print(end);
-    Serial.print("\t\t\t");
-    Serial.print(dist[end]);
-    Serial.print("\t\t\t");
+  Serial.println("Node:\t\t\tCost :\t\t\tPath:");
+  Serial.print(end);
+  Serial.print("\t\t\t");
+  Serial.print(dist[end]);
+  Serial.print("\t\t\t");
 
-    int path[V];
-    int pathLength = 0;
-    int currentNode = end;
+  int pathLength = 0;
+  int currentNode = end;
 
-    // Backtrack from end to source to populate the path array
-    while (currentNode != source && currentNode != parent[currentNode]) {
-        path[pathLength++] = currentNode;
-        currentNode = parent[currentNode];
+  // Backtrack from end to source to populate the path array
+  while (currentNode != source && currentNode != parent[currentNode]) {
+    path[pathLength++] = currentNode;
+    currentNode = parent[currentNode];
+  }
+  // Add source node to the path array
+  path[pathLength++] = source;
+  for (int i = pathLength - 1; i >= 0; i--) {
+    Serial.print(path[i]);
+    if (i > 0) {
+      Serial.print(" -> ");
     }
-
-    // Add source node to the path array
-    path[pathLength++] = source;
-    for (int i = pathLength - 1; i >= 0; i--) {
-        Serial.print(path[i]);
-        if (i > 0) {
-            Serial.print(" -> ");
-        }
     }
     Serial.println();
-    }
+  }
 
 void reset() {
   for (int i = 0; i < V; i++) {
@@ -93,8 +91,9 @@ void reset() {
   }
 }
 
-void dijkstra(){
+int* dijkstra(){
   initialise_dijkstra();
   dijkstra_algorithm();
   display();
+  return path;
 }
