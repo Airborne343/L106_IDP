@@ -175,7 +175,7 @@ if (counter == 0)
     LeftMotor->run(FORWARD);
   RightMotor->run(BACKWARD);
     delay(1000);
-  while(svl==LOW){
+  while(svl == LOW || svr == LOW){
   Serial.println("INSIDEWHILELOOP");
    LeftMotor->run(FORWARD);
     RightMotor->run(BACKWARD);
@@ -205,7 +205,7 @@ if (counter == 0)
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
   delay(1000);
-  while(svr==LOW){
+  while(svl == LOW || svr == LOW){
   Serial.println("INSIDEWHILELOOP");
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
@@ -219,7 +219,7 @@ if (counter == 0)
   LeftMotor->run(FORWARD);
   RightMotor->run(BACKWARD);
   delay(1000);
-  while(svl==LOW){
+  while(svl == LOW || svr == LOW){
   Serial.println("INSIDEWHILELOOP");
    LeftMotor->run(FORWARD);
     RightMotor->run(BACKWARD);
@@ -240,7 +240,7 @@ if (counter == 0)
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
   delay(1000);
-  while(svr==LOW){
+  while(svl == LOW || svr == LOW){
   Serial.println("INSIDEWHILELOOP");
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
@@ -258,7 +258,7 @@ if (counter == 0)
   LeftMotor->run(FORWARD);
   RightMotor->run(BACKWARD);
   delay(1000);
-  while(svl==LOW){
+  while(svl == LOW || svr == LOW){
     Serial.println("INSIDEWHILELOOP");
     LeftMotor->run(FORWARD);
     RightMotor->run(BACKWARD);
@@ -289,7 +289,7 @@ if (counter == 0)
       LeftMotor->run(BACKWARD);
       RightMotor->run(FORWARD);
       delay(1000);
-      while(svr==LOW){
+      while(svl == LOW || svr == LOW){
       Serial.println("INSIDEWHILELOOP");
       LeftMotor->run(BACKWARD);
       RightMotor->run(FORWARD);
@@ -306,7 +306,7 @@ if (counter == 0)
     LeftMotor->run(FORWARD);
     RightMotor->run(BACKWARD);
     delay(1000);
-    while(svl==LOW){
+    while(svl == LOW || svr == LOW){
       Serial.println("INSIDEWHILELOOP");
       LeftMotor->run(FORWARD);
       RightMotor->run(BACKWARD);
@@ -326,7 +326,7 @@ if (counter == 0)
   LeftMotor->run(FORWARD);
   RightMotor->run(BACKWARD);
   delay(300);
-  while(svl==LOW){
+  while(svl == LOW || svr == LOW){
   Serial.println("INSIDEWHILELOOP");
   LeftMotor->run(FORWARD);
   RightMotor->run(BACKWARD);
@@ -342,7 +342,7 @@ if (counter == 0)
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
   delay(300);
-  while(svr==LOW){
+  while(svl == LOW || svr == LOW){
   Serial.println("INSIDEWHILELOOP");
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
@@ -377,7 +377,7 @@ if (counter == 0)
   LeftMotor->run(FORWARD);
   RightMotor->run(BACKWARD);
   delay(800);
-  while(svl==LOW){
+  while(svl == LOW || svr == LOW){
   Serial.println("INSIDEWHILELOOP");
    LeftMotor->run(FORWARD);
     RightMotor->run(BACKWARD);
@@ -393,7 +393,7 @@ if (counter == 0)
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
   delay(800);
-  while(svr==LOW){
+  while(svl == LOW || svr == LOW){
   Serial.println("INSIDEWHILELOOP");
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
@@ -415,7 +415,7 @@ if (counter == 0)
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
   delay(800);
-  while(svr==LOW){
+  while(svl == LOW || svr == LOW){
   Serial.println("INSIDEWHILELOOP");
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
@@ -431,7 +431,7 @@ if (counter == 0)
   LeftMotor->run(FORWARD);
   RightMotor->run(BACKWARD);
   delay(800);
-  while(svl==LOW){
+  while(svl == LOW || svr == LOW){
   Serial.println("INSIDEWHILELOOP");
    LeftMotor->run(FORWARD);
     RightMotor->run(BACKWARD);
@@ -466,7 +466,7 @@ if (counter == 0)
       LeftMotor->run(BACKWARD);
       RightMotor->run(FORWARD);
       delay(1000);
-      while(svr==LOW){
+      while(svl == LOW || svr == LOW){
       Serial.println("INSIDEWHILELOOP");
       LeftMotor->run(BACKWARD);
       RightMotor->run(FORWARD);
@@ -487,7 +487,7 @@ if (counter == 0)
     LeftMotor->run(FORWARD);
     RightMotor->run(BACKWARD);
     delay(1000);
-    while(svl==LOW){
+    while(svl == LOW || svr == LOW){
       Serial.println("INSIDEWHILELOOP");
       LeftMotor->run(FORWARD);
       RightMotor->run(BACKWARD);
@@ -513,7 +513,7 @@ else if (counter == 14){
   LeftMotor->run(FORWARD);
   RightMotor->run(BACKWARD);
   delay(800);
-  while(svl==LOW){
+  while(svl == LOW || svr == LOW){
   Serial.println("INSIDEWHILELOOP");
    LeftMotor->run(FORWARD);
     RightMotor->run(BACKWARD);
@@ -527,7 +527,7 @@ else {
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
   delay(800);
-  while(svr==LOW){
+  while(svl == LOW || svr == LOW){
   Serial.println("INSIDEWHILELOOP");
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
