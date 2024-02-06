@@ -169,6 +169,7 @@ void release()
   myservo.write(0); // tell servo to release to 0 degrees
   }
   
+  
 void backwardlinetracking()
 {
  svl=digitalRead(sl);
