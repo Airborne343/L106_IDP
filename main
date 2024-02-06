@@ -114,6 +114,22 @@ void linetracking(){
   else if (counter==4 && (svvl==HIGH || svvr == HIGH)){
     counterfunction();
   }
+      else if (counter==5 && (svvr == HIGH || svvl == HIGH) )
+  {
+    counterfunction();
+    }
+
+  else if (counter==6 && ultrasensor_reading() <6){
+    counterfunction();
+  }
+
+  else if (counter==3 && (svvl==HIGH || svvr == HIGH)){
+    counterfunction();
+  }
+
+  else if (counter==4 && (svvl==HIGH || svvr == HIGH)){
+    counterfunction();
+  }
 
   
   else if(svl==HIGH   && svr==LOW)
@@ -357,6 +373,46 @@ counter +=2;
       svvr=digitalRead(ssr);
       svvl=digitalRead(ssl);
     }
+  }
+  else if (counter == 8)
+  {
+  if (SOFT == true) {
+      Serial.println("RIGHT90"); //foam then right turn
+  RightMotor->setSpeed(150);
+  LeftMotor->setSpeed(150);
+  LeftMotor->run(FORWARD);
+  RightMotor->run(BACKWARD);
+  delay(800);
+  while(svl==LOW){
+  Serial.println("INSIDEWHILELOOP");
+   LeftMotor->run(FORWARD);
+    RightMotor->run(BACKWARD);
+  svl=digitalRead(sl);
+ }
+ counter +=2;
+    }
+    else {                        
+ Serial.println("LEFT90");    //metal then left
+
+  RightMotor->setSpeed(150);
+  LeftMotor->setSpeed(150);
+  LeftMotor->run(BACKWARD);
+  RightMotor->run(FORWARD);
+  delay(800);
+  while(svr==LOW){
+  Serial.println("INSIDEWHILELOOP");
+  LeftMotor->run(BACKWARD);
+  RightMotor->run(FORWARD);
+  svr=digitalRead(sr);
+  }
+   counter ++;
+    }
+  }
+  else if (counter == 9){
+    counter++;
+  }
+  else if (counter == 10){
+
   }
 }
   
