@@ -136,7 +136,7 @@ void linetracking(){
    { 
   right(); 
   }
-  else if(svl==LOW && svr==LOW)
+  else if(svl==HIGH && svr==HIGH)
    {
   forward();
   }

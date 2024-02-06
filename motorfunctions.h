@@ -37,6 +37,7 @@ void forward()
   delay(tdelay);
  } 
 
+
 void backward()
    {
     LeftMotor->run(BACKWARD);
@@ -44,6 +45,7 @@ void backward()
     Serial.println("BACKWARD");
     delay(tdelay);
    }
+
 
 void right() 
  {
@@ -65,6 +67,7 @@ void left()
   Serial.println("LEFT");
   delay(tdelay); 
 }  
+
 
 void right90() //turn 90 degrees
  {
@@ -169,7 +172,7 @@ void release()
   myservo.write(0); // tell servo to release to 0 degrees
   }
   
-  
+
 void backwardlinetracking()
 {
  svl=digitalRead(sl);
@@ -178,8 +181,7 @@ void backwardlinetracking()
  svvl=digitalRead(ssl); 
   if(svl==HIGH && svr==HIGH)
   {
-  //backward(); 
-  //delay(tdelay);
+  backward();
   }
   else if(svl==HIGH   && svr==LOW)
   {
@@ -191,7 +193,7 @@ void backwardlinetracking()
   }
   else if(svl==LOW && svr==LOW)
    {
-  backward();
+  // backward();
   }
 }
 
