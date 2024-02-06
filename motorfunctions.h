@@ -14,6 +14,7 @@ int svl=0; //sensor value left
 int svvr=0; //outer sensor value right
 int svvl=0; //outer sensor value left
 int servoangle = 110; //angle it turns to grab the block
+int tdelay=2; 
 
 
 // Create the motor shield object with the default I2C address
@@ -23,8 +24,6 @@ Adafruit_DCMotor *LeftMotor = AFMS.getMotor(4);
 Adafruit_DCMotor *RightMotor = AFMS.getMotor(1);
 Adafruit_DCMotor *LiftMotor = AFMS.getMotor(3);
 
-
-int tdelay=2; 
 
 void forward()
  {

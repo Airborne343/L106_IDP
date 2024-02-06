@@ -13,6 +13,7 @@ float dist_t6;
 float sensity_t6;   
 bool Soft = false; //define block
 
+
 float ultrasensor_reading(){
    // read the value from the sensor:
 sensity_t1 = analogRead(sensityPin);
@@ -37,7 +38,6 @@ delay(10);
 dist_t = (dist_t1+dist_t2+dist_t3+dist_t4+dist_t5+dist_t6)/3;
 Serial.println(dist_t);
 return dist_t;
-
 }
 
 void ultrasensor(float distance) {
