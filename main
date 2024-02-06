@@ -145,26 +145,26 @@ void linetracking(){
 
 //CONTERFUNCTION
 void counterfunction(){
-  Serial.println(counter);
-  if (counter == 0)
-  {
-Serial.println("LEFT90");
-    forward();
-    delay(500);
-    RightMotor->setSpeed(150);
+Serial.println(counter);
+if (counter == 0)
+{
+  Serial.println("LEFT90");
+  forward();
+  delay(500);
+  RightMotor->setSpeed(150);
   LeftMotor->setSpeed(150);
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
   delay(1000);
   while(svr==LOW){
-  Serial.println("INSIDEWHILELOOP");
-  LeftMotor->run(BACKWARD);
-  RightMotor->run(FORWARD);
-  svr=digitalRead(sr);
+    Serial.println("INSIDEWHILELOOP");
+    LeftMotor->run(BACKWARD);
+    RightMotor->run(FORWARD);
+    svr=digitalRead(sr);
   }
-    counter ++;
-    
+  counter ++; 
   }
+  
   else if (counter == 1)   //Moving into the junction
   {
   Serial.println("RIGHT90"); 
@@ -247,7 +247,7 @@ Serial.println("LEFT90");
   svr=digitalRead(sr);
   }
     }
-  }
+  
 
   else {                    //TURN RIGHT to the way back to the zone if HARD
   Serial.println("RIGHT90"); 
@@ -266,7 +266,7 @@ Serial.println("LEFT90");
  }
   }
   counter++;
-
+}
 
   else if (counter==4)    //Putting the block and backtracking until the second line
   {
@@ -279,7 +279,7 @@ Serial.println("LEFT90");
       svvr=digitalRead(ssr);
       svvl=digitalRead(ssl);
       if (svvl == HIGH || svvr == HIGH){
-        i+=1
+        i+=1;
       }
     }
     if (SOFT == true) {
@@ -443,9 +443,13 @@ counter +=2;
  }
     }
   }
+
+
   else if (counter==11){
     counter++;
   }
+
+
   else if (counter == 12){
     release();
    svvl = LOW;
@@ -497,13 +501,17 @@ counter +=2;
   }
   counter+=2;
   }
- else if (counter == 13);
+
+
+ else if (counter == 13)
 {
   counter ++;
 }
-else if (counter == 14);{
+
+
+else if (counter == 14){
  if (SOFT == true) {
-      Serial.println("RIGHT90"); //foam then right turn
+  Serial.println("RIGHT90"); //foam then right turn
   RightMotor->setSpeed(150);
   LeftMotor->setSpeed(150);
   LeftMotor->run(FORWARD);
@@ -516,9 +524,8 @@ else if (counter == 14);{
   svl=digitalRead(sl);
  }
     }
-    else {                        
+else {                        
  Serial.println("LEFT90");    //metal then left
-
   RightMotor->setSpeed(150);
   LeftMotor->setSpeed(150);
   LeftMotor->run(BACKWARD);
@@ -531,8 +538,10 @@ else if (counter == 14);{
   svr=digitalRead(sr);
   }
     }
-}
 counter++;
+}
+
+
 else if(counter == 15){
   forward();
   delay(500);
@@ -542,5 +551,3 @@ else if(counter == 15){
 }
 
   
-
-
