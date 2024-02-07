@@ -42,7 +42,7 @@ return dist_t;
 }
 
 void ultrasensor(float distance) {
-if(1<distance && distance< 5.5)
+if(1<distance && distance< 6)
   {
     Serial.println("hard");
     Serial.println(distance);
@@ -62,4 +62,3 @@ else {
 Serial.print("sense");
 delay(3000);
 }
-
