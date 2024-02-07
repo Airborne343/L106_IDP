@@ -1,14 +1,16 @@
 #include <Adafruit_MotorShield.h>
 #include <Servo.h>
-
 Servo myservo; 
 
-int ServoPin = 10;
+int ServoPin = 4;
 int pos = 0; // variable to store the servo position
 int sl=6;   //sensor left
 int sr=7;  //sensor right
 int ssr=8;   //outer sensor right
 int ssl=9;   //outer sensor left
+int led_red = 10;
+int led_green = 11;
+int led_blue = 12;
 int svr=0; //sensor value right
 int svl=0; //sensor value left
 int svvr=0; //outer sensor value right
@@ -20,10 +22,15 @@ int tdelay=2;
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 // Select which 'port' M1, M2, M3 or M4. In this case, M1
-Adafruit_DCMotor *LeftMotor = AFMS.getMotor(4);
-Adafruit_DCMotor *RightMotor = AFMS.getMotor(1);
-Adafruit_DCMotor *LiftMotor = AFMS.getMotor(3);
+Adafruit_DCMotor *LeftMotor = AFMS.getMotor(3);
+Adafruit_DCMotor *RightMotor = AFMS.getMotor(4);
+Adafruit_DCMotor *LiftMotor = AFMS.getMotor(1);
 
+void initializePins() {
+    pinMode(led_red, OUTPUT); 
+    pinMode(led_green, OUTPUT); 
+    pinMode(led_blue, OUTPUT); 
+}
 
 void forward()
  {
@@ -160,6 +167,8 @@ void puttingdown()
 {
   LiftMotor->setSpeed(50);
   LiftMotor->run(BACKWARD);
+  digitalWrite(led_red, HIGH); 
+  digitalWrite(led_green, HIGH); 
   Serial.println("PUTTINGDOWN");
   delay(tdelay);
 }

@@ -1,3 +1,4 @@
+#include "motorfunctions.h"
 #define MAX_RANG (520)//the max measurement value of the module is 520cm(a little bit longerthan effective max range)
 #define ADC_SOLUTION (1023.0)//ADC accuracy of Arduino UNO is 10bit
 int sensityPin = A0; // select the input pin
@@ -11,7 +12,7 @@ float dist_t5;
 float sensity_t5;
 float dist_t6;
 float sensity_t6;   
-bool Soft = false; //define block
+bool SOFT = false; //define block
 
 
 float ultrasensor_reading(){
@@ -45,14 +46,16 @@ if(1<distance && distance< 5.5)
   {
     Serial.println("hard");
     Serial.println(distance);
-    Soft = false;
+    SOFT = false;
     //counter ++; //metal block detect so go to green 
+    digitalWrite(led_red, LOW); //Turn on led_red
     delay(500);
   }
 else {
-  Serial.println("soft");
+  Serial.println("SOFT");
   Serial.println(distance);
-  Soft = true;
+  SOFT = true;
+  digitalWrite(led_green, LOW); //Turn on led_green
     //counter += 2; //foam block detect so go to red
   delay(500);
 }
