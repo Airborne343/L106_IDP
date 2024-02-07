@@ -31,6 +31,9 @@ void setup() {
   digitalWrite(led_red, HIGH); //Turn off led
   digitalWrite(led_blue, HIGH); //Turn off led
   digitalWrite(led_green, HIGH); //Turn off led
+  // while(true){
+  //   backwardlinetracking();
+  // }
 }
 
 void loop() {
@@ -47,6 +50,7 @@ void loop() {
  
   while (linetrack==1){
     linetracking();
+    outersensor_detection();
     } 
 }
 
@@ -61,7 +65,7 @@ void initialise(){
   LeftMotor->run(FORWARD);
   RightMotor->setSpeed(200);
   RightMotor->run(FORWARD);
-  delay(200);
+  delay(2000);
   linetrack = true;
   //need to add a release here? myMotor->run(RELEASE);
 }
@@ -88,18 +92,20 @@ void linetracking(){
    {
   forward();
   }
+}
 
   // else if(svl==LOW && svr==LOW)
   // {
   //  // need to think about what to do when both detects dark;
   // }
-
-  else if (counter==0 && (svvl==HIGH || svvr == HIGH))
+void outersensor_detection(){
+   if (counter==0 && (svvl==HIGH || svvr == HIGH))
   {
+    Serial.println(svvl);
     counterfunction();
     }
 
-  else if (counter==1 && svvr == HIGH)
+  else if (counter==1 && (svvr == HIGH|| svvl == HIGH))
   {
     counterfunction();
     }
@@ -140,6 +146,7 @@ void linetracking(){
   else if ( counter==10 && (svvl==HIGH || svvr == HIGH)){
     counterfunction();
   }
+
 }
 
 void blue_led_flashing(){
