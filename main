@@ -1,15 +1,16 @@
 #include <Adafruit_MotorShield.h>
 #include "ultrasensor.h"
 #include "counterfunction.h"
+
 #define MAX_RANG (520)//the max measurement value of the module is 520cm(a little bit longerthan effective max range)
 #define ADC_SOLUTION (1023.0)//ADC accuracy of Arduino UNO is 10bit
 
 bool linetrack = false;
-int buttonPin = 4;
-int ledPin=13;
+int buttonPin = 5;
 int motorspeed=150; //0-255       
 int t = 0;  //time taken in the junction
 float sensity_t;
+
 
 void setup() {
   // put your setup code here, to run once:
@@ -23,15 +24,18 @@ void setup() {
   pinMode(buttonPin, INPUT); 
   pinMode(sl,INPUT);
   pinMode(sr,INPUT);
+  myservo.attach(ServoPin); // attaches the servo on pin 9 to the servo object
   LeftMotor->setSpeed(motorspeed);
   RightMotor->setSpeed(motorspeed);
-  delay(5000);
   int val = digitalRead(buttonPin); // read input value
-  myservo.attach(ServoPin); // attaches the servo on pin 9 to the servo object
+  digitalWrite(led_red, HIGH); //Turn off led
+  digitalWrite(led_blue, HIGH); //Turn off led
+  digitalWrite(led_green, HIGH); //Turn off led
 }
 
 void loop() {
   // put your main code here, to run repeatedly
+  blue_led_flashing();
   int val = digitalRead(buttonPin); // read input value
   LeftMotor->setSpeed(150);
   RightMotor->setSpeed(150);
@@ -85,10 +89,10 @@ void linetracking(){
   forward();
   }
 
-  else if(svl==LOW && svr==LOW)
-  {
-   // need to think about what to do when both detects dark;
-  }
+  // else if(svl==LOW && svr==LOW)
+  // {
+  //  // need to think about what to do when both detects dark;
+  // }
 
   else if (counter==0 && (svvl==HIGH || svvr == HIGH))
   {
@@ -104,7 +108,7 @@ void linetracking(){
     counterfunction();
   }
 
-  else if (counter==3 && (svvl==HIGH || svvr == HIGH)){
+  else if (counter==3 && ((SOFT==true && (svvl==HIGH || svvr == HIGH)) || (SOFT==false && svvl==HIGH))){
     counterfunction();
   }
 
@@ -112,21 +116,38 @@ void linetracking(){
     counterfunction();
   }
 
-  else if (counter==5 && (svvr == HIGH || svvl == HIGH) )
+  else if (counter==5 && ((SOFT==true && svvr==HIGH) || (SOFT==false && svvl==HIGH)) )
   {
     counterfunction();
     }
 
-  else if (counter==6 && (svvr == HIGH || svvl == HIGH) )
-  {
-    counterfunction();
-    }
-    else if (counter==7 && svr == LOW && svl == LOW ){
+  else if (counter==6 && svr == LOW && svl == LOW ){
     counterfunction();
   }
-  else if (( counter == 8 || counter==9 || counter==10||counter==11||counter==12||counter==13||counter==14||counter==15)&& (svvl==HIGH || svvr == HIGH)){
+
+  else if (counter==7 && ((SOFT==true && svvl==HIGH) || (SOFT==false && svvr==HIGH))){
     counterfunction();
   }
+
+  else if (counter==8 && (svvl==HIGH && svvr==HIGH)){   
+    counterfunction();
+  }
+
+  else if (counter==9 && ((SOFT==true && svvr==HIGH) || (SOFT==false && svvl==HIGH))){   
+    counterfunction();
+  }
+
+  else if ( counter==10 && (svvl==HIGH || svvr == HIGH)){
+    counterfunction();
+  }
+}
+
+void blue_led_flashing(){
+  digitalWrite(led_blue, LOW); //Turn on led_blue
+  delay(100);
+  digitalWrite(led_blue, HIGH); //Turn off led_blue
+  delay(100);
+
 }
 
 

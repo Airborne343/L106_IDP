@@ -16,14 +16,14 @@ int svl=0; //sensor value left
 int svvr=0; //outer sensor value right
 int svvl=0; //outer sensor value left
 int servoangle = 110; //angle it turns to grab the block
-int tdelay=2; 
+int tdelay=10; 
 
 
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 // Select which 'port' M1, M2, M3 or M4. In this case, M1
-Adafruit_DCMotor *LeftMotor = AFMS.getMotor(3);
-Adafruit_DCMotor *RightMotor = AFMS.getMotor(4);
+Adafruit_DCMotor *RightMotor = AFMS.getMotor(3);
+Adafruit_DCMotor *LeftMotor = AFMS.getMotor(4);
 Adafruit_DCMotor *LiftMotor = AFMS.getMotor(1);
 
 void initializePins() {
@@ -40,7 +40,7 @@ void forward()
   LeftMotor->run(FORWARD);
   RightMotor->run(FORWARD);
   Serial.println("FORWARD");
-  delay(tdelay);
+  //delay(tdelay);
  } 
 
 
@@ -55,23 +55,23 @@ void backward()
 
 void right() 
  {
-  LeftMotor->setSpeed(255);
+  LeftMotor->setSpeed(150);
   LeftMotor->run(FORWARD);
-  RightMotor->setSpeed(25);
+  RightMotor->setSpeed(0);
   RightMotor->run(FORWARD);
   Serial.println("RIGHT");
-  delay(tdelay);
+  //delay(tdelay);
   }
 
 
 void left() 
  {
-  RightMotor->setSpeed(225);
+  RightMotor->setSpeed(150);
   RightMotor->run(FORWARD);
-  LeftMotor->setSpeed(25);
+  LeftMotor->setSpeed(0);
   LeftMotor->run(FORWARD);
   Serial.println("LEFT");
-  delay(tdelay); 
+  //delay(tdelay); 
 }  
 
 
