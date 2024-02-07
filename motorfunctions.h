@@ -15,15 +15,15 @@ int svr=0; //sensor value right
 int svl=0; //sensor value left
 int svvr=0; //outer sensor value right
 int svvl=0; //outer sensor value left
-int servoangle = 110; //angle it turns to grab the block
+int servoangle = 80; //angle it turns to grab the block
 int tdelay=10; 
 
 
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 // Select which 'port' M1, M2, M3 or M4. In this case, M1
-Adafruit_DCMotor *RightMotor = AFMS.getMotor(3);
-Adafruit_DCMotor *LeftMotor = AFMS.getMotor(4);
+Adafruit_DCMotor *LeftMotor = AFMS.getMotor(3);
+Adafruit_DCMotor *RightMotor = AFMS.getMotor(4);
 Adafruit_DCMotor *LiftMotor = AFMS.getMotor(1);
 
 void initializePins() {
@@ -35,17 +35,19 @@ void initializePins() {
 void forward()
  {
   //adjust the speed here if needed
-  LeftMotor->setSpeed(255);
-  RightMotor->setSpeed(255);
+  LeftMotor->setSpeed(225);
+  RightMotor->setSpeed(225);
   LeftMotor->run(FORWARD);
   RightMotor->run(FORWARD);
   Serial.println("FORWARD");
-  //delay(tdelay);
+  delay(tdelay);
  } 
 
 
 void backward()
    {
+    LeftMotor->setSpeed(225);
+    RightMotor->setSpeed(225);
     LeftMotor->run(BACKWARD);
     RightMotor->run(BACKWARD);
     Serial.println("BACKWARD");
@@ -55,23 +57,23 @@ void backward()
 
 void right() 
  {
-  LeftMotor->setSpeed(150);
+  LeftMotor->setSpeed(255);
   LeftMotor->run(FORWARD);
-  RightMotor->setSpeed(0);
+  RightMotor->setSpeed(100);
   RightMotor->run(FORWARD);
   Serial.println("RIGHT");
-  //delay(tdelay);
+  delay(tdelay);
   }
 
 
 void left() 
  {
-  RightMotor->setSpeed(150);
+  RightMotor->setSpeed(255);
   RightMotor->run(FORWARD);
-  LeftMotor->setSpeed(0);
+  LeftMotor->setSpeed(100);
   LeftMotor->run(FORWARD);
   Serial.println("LEFT");
-  //delay(tdelay); 
+  delay(tdelay); 
 }  
 
 
@@ -118,9 +120,9 @@ void left90() //turn 90 degrees
 
 void backright() 
  {
-  LeftMotor->setSpeed(155);
+  LeftMotor->setSpeed(200);
   LeftMotor->run(BACKWARD);
-  RightMotor->setSpeed(100);
+  RightMotor->setSpeed(0);
   RightMotor->run(BACKWARD);
   Serial.println("BACKRIGHT");
   delay(tdelay);
@@ -129,9 +131,9 @@ void backright()
 
 void backleft() 
  {
-  RightMotor->setSpeed(155);
+  RightMotor->setSpeed(200);
   RightMotor->run(BACKWARD);
-  LeftMotor->setSpeed(100);
+  LeftMotor->setSpeed(0);
   LeftMotor->run(BACKWARD);
   Serial.println("BACKLEFT");
   delay(tdelay); 
@@ -149,35 +151,35 @@ void grab()
    for (pos = 0; pos <= servoangle; pos += 1) { // goes from 0 degrees to 180 degrees
   // in steps of 1 degree
   myservo.write(pos); // tell servo to go to position in variable 'pos'
-  delay(15); // waits 15 ms for the servo to reach the position
+  delay(50); // waits 15 ms for the servo to reach the position
   }
 }
 
 
 void lift()
 {
-  LiftMotor->setSpeed(50);
+  LiftMotor->setSpeed(200);
   LiftMotor->run(FORWARD);
   Serial.println("LIFT");
-  delay(tdelay);
+  delay(500);
 }
 
 
 void puttingdown()
 {
-  LiftMotor->setSpeed(50);
+  LiftMotor->setSpeed(200);
   LiftMotor->run(BACKWARD);
   digitalWrite(led_red, HIGH); 
   digitalWrite(led_green, HIGH); 
   Serial.println("PUTTINGDOWN");
-  delay(tdelay);
+  delay(500);
 }
 
 
 
 void release()
 {
-  myservo.write(0); // tell servo to release to 0 degrees
+  myservo.write(20); // tell servo to release to 0 degrees
   }
   
 
@@ -201,8 +203,6 @@ void backwardlinetracking()
   }
   else if(svl==LOW && svr==LOW)
    {
-  // backward();
+  backward();
   }
 }
-
-
