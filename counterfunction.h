@@ -33,13 +33,17 @@ else if (counter == 1)   //Moving into the junction
   LeftMotor->setSpeed(150);
   LeftMotor->run(FORWARD);
   RightMotor->run(BACKWARD);
-  delay(1000);
+  delay(1500);
   while(svl==LOW){
     Serial.println("INSIDEWHILELOOP");
     LeftMotor->run(FORWARD);
     RightMotor->run(BACKWARD);
     svl=digitalRead(sl);
  }
+    LeftMotor->run(FORWARD);
+    RightMotor->run(BACKWARD);
+    delay(100);
+    release();
   counter++;
   }
 
@@ -49,6 +53,8 @@ else if (counter==2) //Sensing and detecting the block
     stop();
     ultrasensor(ultrasensor_reading()); 
     grab();
+    delay(700);
+    lift();
     backward();
     delay(400);
     svvl = LOW;
@@ -59,13 +65,15 @@ else if (counter==2) //Sensing and detecting the block
       svvr=digitalRead(ssr);
       svvl=digitalRead(ssl);
     }
+    backward();
+    delay(200);
     if (SOFT == true) {
         Serial.println("LEFT90");    //TURN LEFT to the way back to the zone if SOFT
         RightMotor->setSpeed(150);
         LeftMotor->setSpeed(150);
         LeftMotor->run(BACKWARD);
         RightMotor->run(FORWARD);
-        delay(1000);
+        delay(1250);
         while(svr==LOW){
             Serial.println("INSIDEWHILELOOP");
             LeftMotor->run(BACKWARD);
@@ -79,7 +87,7 @@ else if (counter==2) //Sensing and detecting the block
     LeftMotor->setSpeed(150);
     LeftMotor->run(FORWARD);
     RightMotor->run(BACKWARD);
-    delay(1000);
+    delay(1500);
     while(svl==LOW){
         Serial.println("INSIDEWHILELOOP");
         LeftMotor->run(FORWARD);
@@ -134,6 +142,7 @@ counter++;
 
 else if (counter==4)    //Putting the block and backtracking until the second line
   {
+    puttingdown();
     release();
     svvl = LOW;
     svvr = LOW;
