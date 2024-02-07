@@ -21,6 +21,7 @@ if (counter == 0)
     svr=digitalRead(sr);
   }
   counter ++; 
+  Serial.println(counter);
   }
   
 else if (counter == 1)   //Moving into the junction
@@ -48,6 +49,8 @@ else if (counter==2) //Sensing and detecting the block
     stop();
     ultrasensor(ultrasensor_reading()); 
     grab();
+    backward();
+    delay(400);
     svvl = LOW;
     svvr = LOW;
     while(svvl == LOW && svvr == LOW){
