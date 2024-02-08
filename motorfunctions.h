@@ -15,7 +15,7 @@ int svr=0; //sensor value right
 int svl=0; //sensor value left
 int svvr=0; //outer sensor value right
 int svvl=0; //outer sensor value left
-int servoangle = 80; //angle it turns to grab the block
+int servoangle = 90; //angle it turns to grab the block
 int tdelay=10; 
 
 
@@ -46,8 +46,8 @@ void forward()
 
 void backward()
    {
-    LeftMotor->setSpeed(225);
-    RightMotor->setSpeed(225);
+    LeftMotor->setSpeed(200);
+    RightMotor->setSpeed(200);
     LeftMotor->run(BACKWARD);
     RightMotor->run(BACKWARD);
     Serial.println("BACKWARD");
@@ -114,30 +114,46 @@ void left90() //turn 90 degrees
   RightMotor->run(FORWARD);
   svr=digitalRead(sr);
  }
-  //delay(1000);
   }
 
 
 void backright() 
  {
-  LeftMotor->setSpeed(200);
+  LeftMotor->setSpeed(150);
   LeftMotor->run(BACKWARD);
   RightMotor->setSpeed(0);
   RightMotor->run(BACKWARD);
   Serial.println("BACKRIGHT");
-  delay(tdelay);
+  delay(900);
+  svl=digitalRead(sl);
+  svr=digitalRead(sr);
+  while(svl==LOW){
+      backward();
+      svl=digitalRead(sl);
   }
 
+  // delay(300);
+
+  }
+  
 
 void backleft() 
  {
-  RightMotor->setSpeed(200);
+  RightMotor->setSpeed(150);
   RightMotor->run(BACKWARD);
   LeftMotor->setSpeed(0);
   LeftMotor->run(BACKWARD);
   Serial.println("BACKLEFT");
-  delay(tdelay); 
-}  
+  delay(900);
+  while(svr==LOW){
+      backward();
+      svr=digitalRead(sr);
+  }
+
+  // delay(300);
+
+  }
+
 
 
 void stop()
@@ -151,14 +167,14 @@ void grab()
    for (pos = 0; pos <= servoangle; pos += 1) { // goes from 0 degrees to 180 degrees
   // in steps of 1 degree
   myservo.write(pos); // tell servo to go to position in variable 'pos'
-  delay(50); // waits 15 ms for the servo to reach the position
+  delay(30); // waits 15 ms for the servo to reach the position
   }
 }
 
 
 void lift()
 {
-  LiftMotor->setSpeed(200);
+  LiftMotor->setSpeed(250);
   LiftMotor->run(FORWARD);
   Serial.println("LIFT");
   delay(500);
@@ -167,10 +183,10 @@ void lift()
 
 void puttingdown()
 {
-  LiftMotor->setSpeed(200);
+  LiftMotor->setSpeed(250);
   LiftMotor->run(BACKWARD);
-  digitalWrite(led_red, HIGH); 
-  digitalWrite(led_green, HIGH); 
+  digitalWrite(led_red, LOW); 
+  digitalWrite(led_green, LOW); 
   Serial.println("PUTTINGDOWN");
   delay(500);
 }

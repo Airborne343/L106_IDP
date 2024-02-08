@@ -28,12 +28,10 @@ void setup() {
   LeftMotor->setSpeed(motorspeed);
   RightMotor->setSpeed(motorspeed);
   int val = digitalRead(buttonPin); // read input value
-  digitalWrite(led_red, HIGH); //Turn off led
-  digitalWrite(led_blue, HIGH); //Turn off led
-  digitalWrite(led_green, HIGH); //Turn off led
-  // while(true){
-  //   backwardlinetracking();
-  // }
+  digitalWrite(led_red, LOW); //Turn off led
+  digitalWrite(led_blue, LOW); //Turn off led
+  digitalWrite(led_green, LOW); //Turn off led
+
 }
 
 void loop() {
@@ -65,7 +63,7 @@ void initialise(){
   LeftMotor->run(FORWARD);
   RightMotor->setSpeed(200);
   RightMotor->run(FORWARD);
-  delay(2000);
+  delay(3000);
   linetrack = true;
   //need to add a release here? myMotor->run(RELEASE);
 }
