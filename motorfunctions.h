@@ -124,7 +124,7 @@ void backright()
   RightMotor->setSpeed(0);
   RightMotor->run(BACKWARD);
   Serial.println("BACKRIGHT");
-  delay(900);
+  delay(400);
   svl=digitalRead(sl);
   svr=digitalRead(sr);
   while(svl==LOW){
@@ -144,7 +144,7 @@ void backleft()
   LeftMotor->setSpeed(0);
   LeftMotor->run(BACKWARD);
   Serial.println("BACKLEFT");
-  delay(900);
+  delay(400);
   while(svr==LOW){
       backward();
       svr=digitalRead(sr);
@@ -220,5 +220,28 @@ void backwardlinetracking()
   else if(svl==LOW && svr==LOW)
    {
   backward();
+  }
+}
+
+//LINETRACKING FUNCTIONS
+void linetracking(){
+ svl=digitalRead(sl);
+ svr=digitalRead(sr);
+ svvr=digitalRead(ssr);
+ svvl=digitalRead(ssl);
+   
+  if(svl==HIGH   && svr==LOW)
+  {
+  left(); 
+  }
+
+  else if(svl==LOW && svr==HIGH)
+   { 
+  right(); 
+  }
+
+  else if(svl==HIGH && svr==HIGH)
+   {
+  forward();
   }
 }

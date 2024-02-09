@@ -65,37 +65,9 @@ void initialise(){
   RightMotor->run(FORWARD);
   delay(3000);
   linetrack = true;
-  //need to add a release here? myMotor->run(RELEASE);
 }
 
 
-//LINETRACKING FUNCTIONS
-void linetracking(){
- svl=digitalRead(sl);
- svr=digitalRead(sr);
- svvr=digitalRead(ssr);
- svvl=digitalRead(ssl);
-   
-  if(svl==HIGH   && svr==LOW)
-  {
-  left(); 
-  }
-
-  else if(svl==LOW && svr==HIGH)
-   { 
-  right(); 
-  }
-
-  else if(svl==HIGH && svr==HIGH)
-   {
-  forward();
-  }
-}
-
-  // else if(svl==LOW && svr==LOW)
-  // {
-  //  // need to think about what to do when both detects dark;
-  // }
 void outersensor_detection(){
    if (counter==0 && (svvl==HIGH || svvr == HIGH))
   {
@@ -141,9 +113,26 @@ void outersensor_detection(){
     counterfunction();
   }
 
-  else if ( counter==10 && (svvl==HIGH || svvr == HIGH)){
+  else if (counter==10 && (svvl==HIGH || svvr == HIGH)){
     counterfunction();
   }
+
+  else if (counter==11 && (svvl==HIGH || svvr == HIGH)){
+    counterfunction();
+  }
+
+  else if (counter==12 && (svvl==HIGH || svvr == HIGH)){
+    counterfunction();
+  }
+
+  else if (counter==13 && (svvl==HIGH)){
+  counterfunction();
+  }
+
+  else if (counter==14 && (svvr==HIGH)){
+  counterfunction();
+  }
+
 
 }
 
