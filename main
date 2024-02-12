@@ -31,7 +31,7 @@ void setup() {
   digitalWrite(led_red, LOW); //Turn off led
   digitalWrite(led_blue, LOW); //Turn off led
   digitalWrite(led_green, LOW); //Turn off led
-
+  distancesensor_setup();
 }
 
 void loop() {
