@@ -164,7 +164,7 @@ void stop()
 
 void grab()
 {
-   for (pos = 0; pos <= servoangle; pos += 1) { // goes from 0 degrees to 180 degrees
+   for (pos = 20; pos <= servoangle; pos += 1) { // goes from 0 degrees to 180 degrees
   // in steps of 1 degree
   myservo.write(pos); // tell servo to go to position in variable 'pos'
   delay(30); // waits 15 ms for the servo to reach the position
@@ -178,17 +178,19 @@ void lift()
   LiftMotor->run(FORWARD);
   Serial.println("LIFT");
   delay(500);
+  LiftMotor->run(RELEASE);
 }
 
 
 void puttingdown()
 {
-  LiftMotor->setSpeed(250);
+  LiftMotor->setSpeed(150);
   LiftMotor->run(BACKWARD);
   digitalWrite(led_red, LOW); 
   digitalWrite(led_green, LOW); 
   Serial.println("PUTTINGDOWN");
   delay(500);
+  LiftMotor->run(RELEASE);
 }
 
 

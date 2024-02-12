@@ -69,9 +69,13 @@ void initialise(){
 
 
 void outersensor_detection(){
+    svvr=digitalRead(ssr);
+    svvl=digitalRead(ssl);
+    Serial.println(svvr);
+    Serial.println(svvl);
+    Serial.println(counter);
    if (counter==0 && (svvl==HIGH || svvr == HIGH))
   {
-    Serial.println(svvl);
     counterfunction();
     }
 
@@ -110,14 +114,15 @@ void outersensor_detection(){
   }
 
   else if (counter==9 && ((SOFT==true && svvl==HIGH) || (SOFT==false && svvr==HIGH))){   
+    Serial.println(counter);
     counterfunction();
   }
 
-  else if (counter==10 && (svvl==HIGH || svvr == HIGH)){ //return to base p1
+  else if (counter==10 && (svvl==HIGH || svvr == HIGH)){ 
     counterfunction();
   }
 
-  else if (counter==11 && ((SOFT==true && svvl==HIGH) || (SOFT==false && svvr==HIGH))){
+  else if (counter==11 && (SOFT==true && svvr==HIGH) || (SOFT==false && svvl==HIGH)){
     counterfunction();
   }
 
@@ -158,8 +163,6 @@ void outersensor_detection(){
   }
   }
 
-
-}
 
 void blue_led_flashing(){
   digitalWrite(led_blue, LOW); //Turn on led_blue
