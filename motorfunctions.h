@@ -227,6 +227,7 @@ void backwardlinetracking()
 
 //LINETRACKING FUNCTIONS
 void linetracking(){
+blue_led_flashing();
  svl=digitalRead(sl);
  svr=digitalRead(sr);
  svvr=digitalRead(ssr);
