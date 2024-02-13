@@ -1,13 +1,13 @@
 #include <Adafruit_MotorShield.h>
 #include "ultrasensor.h"
-#include "counterfunction.h"
+#include "counterfunction_copy.h"
 
 #define MAX_RANG (520)//the max measurement value of the module is 520cm(a little bit longerthan effective max range)
 #define ADC_SOLUTION (1023.0)//ADC accuracy of Arduino UNO is 10bit
 
 bool linetrack = false;
 int buttonPin = 5;
-int motorspeed=150; //0-255       
+int motorspeed = 150; //0-255       
 int t = 0;  //time taken in the junction
 float sensity_t;
 
@@ -71,8 +71,6 @@ void initialise(){
 void outersensor_detection(){
     svvr=digitalRead(ssr);
     svvl=digitalRead(ssl);
-    Serial.println(svvr);
-    Serial.println(svvl);
     Serial.println(counter);
    if (counter==0 && (svvl==HIGH || svvr == HIGH))
   {
@@ -113,8 +111,7 @@ void outersensor_detection(){
     counterfunction();
   }
 
-  else if (counter==9 && ((SOFT==true && svvl==HIGH) || (SOFT==false && svvr==HIGH))){   
-    Serial.println(counter);
+  else if (counter==9 && ((SOFT==true && svvl==HIGH) || (SOFT==false && svvr==HIGH))){ 
     counterfunction();
   }
 
@@ -127,11 +124,11 @@ void outersensor_detection(){
   }
 
   else if (counter==12 && (svvl==HIGH && svvr==HIGH)){
-  counterfunction();
+    counterfunction();
   }
 
   else if (counter==13 && ((SOFT==true && svvl==HIGH) || (SOFT==false && svvr==HIGH))){
-  counterfunction();
+    counterfunction();
   }
 
   else if (counter==14 && (svvl==HIGH || svvr==HIGH)){
@@ -164,15 +161,3 @@ void outersensor_detection(){
   }
 
 
-void blue_led_flashing(){
-  digitalWrite(led_blue, LOW); //Turn on led_blue
-  delay(100);
-  digitalWrite(led_blue, HIGH); //Turn off led_blue
-  delay(100);
-
-}
-
-
-
-
-  
