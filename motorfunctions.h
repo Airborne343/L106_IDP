@@ -41,8 +41,8 @@ void blue_led_flashing(){
 void forward()
  {
   //adjust the speed here if needed
-  LeftMotor->setSpeed(225);
-  RightMotor->setSpeed(225);
+  LeftMotor->setSpeed(255);
+  RightMotor->setSpeed(255);
   LeftMotor->run(FORWARD);
   RightMotor->run(FORWARD);
   Serial.println("FORWARD");
@@ -52,8 +52,8 @@ void forward()
 
 void backward()
    {
-    LeftMotor->setSpeed(200);
-    RightMotor->setSpeed(200);
+    LeftMotor->setSpeed(225);
+    RightMotor->setSpeed(225);
     LeftMotor->run(BACKWARD);
     RightMotor->run(BACKWARD);
     Serial.println("BACKWARD");
