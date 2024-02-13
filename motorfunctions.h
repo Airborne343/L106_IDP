@@ -26,12 +26,18 @@ Adafruit_DCMotor *LeftMotor = AFMS.getMotor(3);
 Adafruit_DCMotor *RightMotor = AFMS.getMotor(4);
 Adafruit_DCMotor *LiftMotor = AFMS.getMotor(1);
 
-void initializePins() {
+void pininitialise() {
     pinMode(led_red, OUTPUT); 
     pinMode(led_green, OUTPUT); 
     pinMode(led_blue, OUTPUT); 
 }
+void blue_led_flashing(){
+  digitalWrite(led_blue, LOW); //Turn on led_blue
+  delay(100);
+  digitalWrite(led_blue, HIGH); //Turn off led_blue
+  delay(100);
 
+}
 void forward()
  {
   //adjust the speed here if needed
@@ -227,7 +233,7 @@ void backwardlinetracking()
 
 //LINETRACKING FUNCTIONS
 void linetracking(){
-blue_led_flashing();
+  blue_led_flashing();
  svl=digitalRead(sl);
  svr=digitalRead(sr);
  svvr=digitalRead(ssr);
@@ -248,3 +254,4 @@ blue_led_flashing();
   forward();
   }
 }
+
