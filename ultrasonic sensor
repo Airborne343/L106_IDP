@@ -8,7 +8,7 @@
 DFRobot_VL53L0X sensor;
 
 int sensityPin = A0; // select the input pin
-int distance; 
+// float distance; 
 float dist_t1;
 float sensity_t1; 
 float dist_t3;
@@ -23,6 +23,7 @@ bool SOFT = false; //define block
 bool detect = false;
 
 void distancesensor_setup() {
+ Serial.begin(115200);
  //join i2c bus (address optional for master)
  Wire.begin();
  //Set I2C sub-device address
@@ -85,13 +86,12 @@ delay(3000);
 
 void distancesensordetection()   //Return boolean detect or not detect
 {
-  distance = sensor.getDistance();
-  Serial.println(distance);
-  if (9000 < distance < 27000){          //Need to change the value here to see where is the block
+  Serial.println(sensor.getDistance());
+  if (sensor.getDistance() > 100000){          //Need to change the value here to see where is the block
     // detect = true;
     Serial.println("DETECT");
   }
-  else{
+  else {
     detect = false;
   }
 }
