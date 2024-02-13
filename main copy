@@ -6,6 +6,7 @@
 #define ADC_SOLUTION (1023.0)//ADC accuracy of Arduino UNO is 10bit
 
 bool linetrack = false;
+bool distance_sensor = false;
 int buttonPin = 5;
 int motorspeed = 150; //0-255       
 int t = 0;  //time taken in the junction
@@ -49,7 +50,11 @@ void loop() {
   while (linetrack==1){
     linetracking();
     outersensor_detection();
-    } 
+    }
+  
+  while (distance_sensor==1){
+    distancesensordetection();
+  }
 }
 
 //UNIVERSAL FUNCTION
@@ -115,49 +120,55 @@ void outersensor_detection(){
     counterfunction();
   }
 
-  else if (counter==10 && (svvl==HIGH || svvr == HIGH)){ 
+  else if (counter==10 && (svl==HIGH || svr==HIGH)){
     counterfunction();
   }
 
-  else if (counter==11 && (SOFT==true && svvr==HIGH) || (SOFT==false && svvl==HIGH)){
+  else if (counter==11 && (svvl==HIGH || svvr == HIGH)){ 
     counterfunction();
   }
 
-  else if (counter==12 && (svvl==HIGH && svvr==HIGH)){
+  else if (counter==12 && (SOFT==true && svvr==HIGH) || (SOFT==false && svvl==HIGH)){
     counterfunction();
   }
 
-  else if (counter==13 && ((SOFT==true && svvl==HIGH) || (SOFT==false && svvr==HIGH))){
+  else if (counter==13 && (svvl==HIGH && svvr==HIGH)){
     counterfunction();
   }
 
-  else if (counter==14 && (svvl==HIGH || svvr==HIGH)){
+  else if (counter==14 && ((SOFT==true && svvl==HIGH) || (SOFT==false && svvr==HIGH))){    
+    counterfunction();
+  }
+
+  else if (counter==15 && (svvl==HIGH || svvr==HIGH)){ 
+    counterfunction();
+  }
+
+  else if (counter==16 && (svvl==HIGH || svvr==HIGH)){
   counterfunction();
   }
 
-  else if (counter==15 && (svvl==HIGH)){
-  counterfunction();
+  else if (counter==17 && (svvl==HIGH)){ //return to base p2
+    counterfunction();
   }
-
-  else if (counter==16 && (svvl==HIGH || svvr == HIGH)){ //return to base p2
+  
+  else if (counter==18 && (svvl==HIGH || svvr == HIGH)){ 
     counterfunction();
   }
 
-  else if (counter==17 && ((SOFT==true && svvl==HIGH) || (SOFT==false && svvr==HIGH))){
+  else if (counter==19 && ((SOFT==true && svvl==HIGH) || (SOFT==false && svvr==HIGH))){
     counterfunction();
   }
 
-  else if (counter==18 && (svvl==HIGH && svvr==HIGH)){   
+  else if (counter==20 && (svvl==HIGH && svvr==HIGH)){   
     counterfunction();
   }
 
-  else if (counter==19 && ((SOFT==true && svvr==HIGH) || (SOFT==false && svvl==HIGH))){   
+  else if (counter==21 && ((SOFT==true && svvr==HIGH) || (SOFT==false && svvl==HIGH))){   
     counterfunction();
   }
 
-  else if (counter==20 && (svvl==HIGH || svvr == HIGH)){
+  else if (counter==22 && (svvl==HIGH || svvr == HIGH)){
     counterfunction();
   }
   }
-
-
