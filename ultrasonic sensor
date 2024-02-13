@@ -87,8 +87,8 @@ void distancesensordetection()   //Return boolean detect or not detect
 {
   distance = sensor.getDistance();
   Serial.println(distance);
-  if (100 < distance < 250){          //Need to change the value here to see where is the block
-    detect = true;
+  if (9000 < distance < 27000){          //Need to change the value here to see where is the block
+    // detect = true;
     Serial.println("DETECT");
   }
   else{
