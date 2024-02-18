@@ -9,18 +9,9 @@ DFRobot_VL53L0X sensor;
 
 int sensityPin = A0; // select the input pin
 // float distance; 
-float dist_t1;
-float sensity_t1; 
-float dist_t3;
-float sensity_t3, dist_t2, sensity_t2, dist_t ;// define variables
-float dist_t4;
-float sensity_t4;
-float dist_t5;
-float sensity_t5;
-float dist_t6;
-float sensity_t6;   
+float dist_t1, sensity_t1, dist_t3, sensity_t3, dist_t2, sensity_t2, dist_t, dist_t4, sensity_t4, dist_t5, sensity_t5, dist_t6, sensity_t6;// define variables   
 bool SOFT = false; //define block
-bool detect = false;
+bool detect = false; //define when we need detection
 
 void distancesensor_setup() {
  Serial.begin(115200);
@@ -35,10 +26,9 @@ void distancesensor_setup() {
 }
 
 
-float ultrasensor_reading(){
-   // read the value from the sensor:
+float ultrasensor_reading(){ // read the value from the sensor:
 sensity_t1 = analogRead(sensityPin);
-dist_t1 = sensity_t1 * MAX_RANG / ADC_SOLUTION;//
+dist_t1 = sensity_t1 * MAX_RANG / ADC_SOLUTION; //measure values for 6 times
 delay(10);
 sensity_t2 = analogRead(sensityPin);
 dist_t2 = sensity_t2 * MAX_RANG / ADC_SOLUTION;//
@@ -56,42 +46,27 @@ sensity_t6 = analogRead(sensityPin);
 dist_t6 = sensity_t6 * MAX_RANG / ADC_SOLUTION;//
 delay(10);
 
-dist_t = (dist_t1+dist_t2+dist_t3+dist_t4+dist_t5+dist_t6)/3;
+dist_t = (dist_t1+dist_t2+dist_t3+dist_t4+dist_t5+dist_t6)/3; //average values to get one number for detection
 Serial.println(dist_t);
-return dist_t;
+return dist_t; //return detection sensor value
 }
 
-void ultrasensor(float distance) {
-if(1<distance && distance< 7)
+void ultrasensor(float distance) { //sensing function is here
+if(1<distance && distance< 7)  //by trial and error, 7 is the optimal value of transition to detect blocks
   {
-    Serial.println("hard");
+    Serial.println("hard");    //low value gives metal block, denser block
     Serial.println(distance);
     SOFT = false;
-    //counter ++; //metal block detect so go to green 
     digitalWrite(led_red, HIGH); //Turn on led_red
     delay(500);
   }
 else {
-  Serial.println("SOFT");
+  Serial.println("SOFT");     //any other value is foam, less dense
   Serial.println(distance);
   SOFT = true;
   digitalWrite(led_green, HIGH); //Turn on led_green
-    //counter += 2; //foam block detect so go to red
   delay(500);
 }
-Serial.print("sense");
+Serial.print("sense");  //show that it succeed sensing
 delay(3000);
-}
-
-
-void distancesensordetection()   //Return boolean detect or not detect
-{
-  Serial.println(sensor.getDistance());
-  if (sensor.getDistance() > 100000){          //Need to change the value here to see where is the block
-    // detect = true;
-    Serial.println("DETECT");
-  }
-  else {
-    detect = false;
-  }
 }
