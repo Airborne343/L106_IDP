@@ -19,7 +19,7 @@ void left90(){     //turn 90degrees to left
   }
 }
 
-void right90(){
+void right90(){  //turn right 90
   Serial.println("RIGHT90"); 
   forward();
   delay(500);
@@ -36,8 +36,8 @@ void right90(){
  }
 }
 
-void hardleft90(){
-  Serial.println("LEFT90");    //TURN LEFT to the way back to the zone if SOFT
+void hardleft90(){      //turn left faster
+  Serial.println("LEFT90");    
         RightMotor->setSpeed(200);
         LeftMotor->setSpeed(0);
         LeftMotor->run(FORWARD);
@@ -51,7 +51,7 @@ void hardleft90(){
         }
 }
 
-void hardright90(){
+void hardright90(){    //turn right faster
    Serial.println("RIGHT90"); 
     RightMotor->setSpeed(0);
     LeftMotor->setSpeed(200);
