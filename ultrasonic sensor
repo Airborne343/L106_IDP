@@ -8,7 +8,7 @@
 DFRobot_VL53L0X sensor;
 
 int sensityPin = A0; // select the input pin
-// float distance; 
+float distance; 
 float dist_t1, sensity_t1, dist_t3, sensity_t3, dist_t2, sensity_t2, dist_t, dist_t4, sensity_t4, dist_t5, sensity_t5, dist_t6, sensity_t6;// define variables   
 bool SOFT = false; //define block
 bool detect = false; //define when we need detection
@@ -35,7 +35,9 @@ delay(10);
 
 dist_t = (dist_t1+dist_t2+dist_t3+dist_t4+dist_t5+dist_t6)/3; //average values to get one number for detection
 Serial.println(dist_t);
-return dist_t; //return detection sensor value
+
+dist_t = distance;
+return distance; //return detection sensor value
 }
 
 void ultrasensor(float distance) { //sensing function is here
