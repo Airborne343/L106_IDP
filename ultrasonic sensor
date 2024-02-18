@@ -13,19 +13,6 @@ float dist_t1, sensity_t1, dist_t3, sensity_t3, dist_t2, sensity_t2, dist_t, dis
 bool SOFT = false; //define block
 bool detect = false; //define when we need detection
 
-void distancesensor_setup() {
- Serial.begin(115200);
- //join i2c bus (address optional for master)
- Wire.begin();
- //Set I2C sub-device address
- sensor.begin(0x50);
- //Set to Back-to-back mode and high precision mode
- sensor.setMode(sensor.eContinuous,sensor.eHigh);
- //Laser rangefinder begins to work
- sensor.start();
-}
-
-
 float ultrasensor_reading(){ // read the value from the sensor:
 sensity_t1 = analogRead(sensityPin);
 dist_t1 = sensity_t1 * MAX_RANG / ADC_SOLUTION; //measure values for 6 times
