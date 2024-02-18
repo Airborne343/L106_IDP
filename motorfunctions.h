@@ -8,7 +8,7 @@ int sl=6;   //sensor left
 int sr=7;  //sensor right
 int ssr=8;   //outer sensor right
 int ssl=9;   //outer sensor left
-int led_red = 10;
+int led_red = 10;    //light sensors
 int led_green = 11;
 int led_blue = 12;
 int svr=0; //sensor value right
@@ -26,19 +26,19 @@ Adafruit_DCMotor *LeftMotor = AFMS.getMotor(3);
 Adafruit_DCMotor *RightMotor = AFMS.getMotor(4);
 Adafruit_DCMotor *LiftMotor = AFMS.getMotor(1);
 
-void pininitialise() {
+void pininitialise() {    //output for led lights
     pinMode(led_red, OUTPUT); 
     pinMode(led_green, OUTPUT); 
     pinMode(led_blue, OUTPUT); 
 }
-void blue_led_flashing(){
+void blue_led_flashing(){    //function to turn blue led on during motion
   digitalWrite(led_blue, LOW); //Turn on led_blue
   delay(100);
   digitalWrite(led_blue, HIGH); //Turn off led_blue
   delay(100);
 
 }
-void forward()
+void forward()        //forward function
  {
   //adjust the speed here if needed
   LeftMotor->setSpeed(255);
@@ -50,7 +50,7 @@ void forward()
  } 
 
 
-void backward()
+void backward()        //backwards function
    {
     LeftMotor->setSpeed(225);
     RightMotor->setSpeed(225);
@@ -61,7 +61,7 @@ void backward()
    }
 
 
-void right() 
+void right()     //slight right for linetracking, by one motor faster than the other
  {
   LeftMotor->setSpeed(255);
   LeftMotor->run(FORWARD);
@@ -72,7 +72,7 @@ void right()
   }
 
 
-void left() 
+void left()     //slight left for linetracking, by one motor faster than the other
  {
   RightMotor->setSpeed(255);
   RightMotor->run(FORWARD);
@@ -168,7 +168,7 @@ void stop()
   RightMotor->run(RELEASE);
  }
 
-void grab()
+void grab()        //close crawls
 {
    for (pos = 20; pos <= servoangle; pos += 1) { // goes from 0 degrees to 180 degrees
   // in steps of 1 degree
@@ -178,7 +178,7 @@ void grab()
 }
 
 
-void lift()
+void lift()        //lift crawls
 {
   LiftMotor->setSpeed(250);
   LiftMotor->run(FORWARD);
@@ -188,7 +188,7 @@ void lift()
 }
 
 
-void puttingdown()
+void puttingdown()     //put crawls down
 {
   LiftMotor->setSpeed(150);
   LiftMotor->run(BACKWARD);
@@ -199,9 +199,7 @@ void puttingdown()
   LiftMotor->run(RELEASE);
 }
 
-
-
-void release()
+void release()        //open crawls
 {
   myservo.write(20); // tell servo to release to 0 degrees
   }
