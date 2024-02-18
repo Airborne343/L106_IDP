@@ -122,46 +122,6 @@ void left90() //turn 90 degrees
  }
   }
 
-
-void backright() 
- {
-  LeftMotor->setSpeed(150);
-  LeftMotor->run(BACKWARD);
-  RightMotor->setSpeed(0);
-  RightMotor->run(BACKWARD);
-  Serial.println("BACKRIGHT");
-  delay(400);
-  svl=digitalRead(sl);
-  svr=digitalRead(sr);
-  while(svl==LOW){
-      backward();
-      svl=digitalRead(sl);
-  }
-
-  // delay(300);
-
-  }
-  
-
-void backleft() 
- {
-  RightMotor->setSpeed(150);
-  RightMotor->run(BACKWARD);
-  LeftMotor->setSpeed(0);
-  LeftMotor->run(BACKWARD);
-  Serial.println("BACKLEFT");
-  delay(400);
-  while(svr==LOW){
-      backward();
-      svr=digitalRead(sr);
-  }
-
-  // delay(300);
-
-  }
-
-
-
 void stop()
  {
   LeftMotor->run(RELEASE);
@@ -204,31 +164,6 @@ void release()        //open crawls
   myservo.write(20); // tell servo to release to 0 degrees
   }
   
-
-void backwardlinetracking()
-{
- svl=digitalRead(sl);
- svr=digitalRead(sr);
- svvr=digitalRead(ssr);
- svvl=digitalRead(ssl); 
-  if(svl==HIGH && svr==HIGH)
-  {
-  backward();
-  }
-  else if(svl==HIGH   && svr==LOW)
-  {
-  backleft(); 
-  }
-  else if(svl==LOW && svr==HIGH)
-   { 
-  backright(); 
-  }
-  else if(svl==LOW && svr==LOW)
-   {
-  backward();
-  }
-}
-
 //LINETRACKING FUNCTIONS
 void linetracking(){
   blue_led_flashing();
