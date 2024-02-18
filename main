@@ -56,8 +56,7 @@ void loop() {
 
 
 //STARTING FUNCTION
-void initialise(){
-  //move forward for 2 seconds
+void initialise(){    //move forward for 2 seconds, out of box
   Serial.println("INITIALISE");
   LeftMotor->setSpeed(200);
   LeftMotor->run(FORWARD);
@@ -68,8 +67,8 @@ void initialise(){
 }
 
 
-void outersensor_detection(){
-   if (counter==0 && (svvl==HIGH || svvr == HIGH))
+void outersensor_detection(){    //whenever outer sensor detects a line, function will can and see if and where the robot is and perform the turns, also depends on block detection
+   if (counter==0 && (svvl==HIGH || svvr == HIGH))    //each counterfunction is one junction
   {
     Serial.println(svvl);
     counterfunction();
@@ -84,7 +83,7 @@ void outersensor_detection(){
     counterfunction();
   }
 
-  else if (counter==3 && ((SOFT==true && (svvl==HIGH || svvr == HIGH)) || (SOFT==false && svvl==HIGH))){
+  else if (counter==3 && ((SOFT==true && (svvl==HIGH || svvr == HIGH)) || (SOFT==false && svvl==HIGH))){  //everytime it reaches a junction, a counter function may or maynot call depends on the requirements
     counterfunction();
   }
 
