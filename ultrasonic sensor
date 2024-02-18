@@ -1,0 +1,61 @@
+#include "motorfunctions.h"
+#include "Arduino.h"
+#include "Wire.h"
+#include "DFRobot_VL53L0X.h"
+#define MAX_RANG (520)//the max measurement value of the module is 520cm(a little bit longerthan effective max range)
+#define ADC_SOLUTION (1023.0)//ADC accuracy of Arduino UNO is 10bit
+
+DFRobot_VL53L0X sensor;
+
+int sensityPin = A0; // select the input pin
+float distance; 
+float dist_t1, sensity_t1, dist_t3, sensity_t3, dist_t2, sensity_t2, dist_t, dist_t4, sensity_t4, dist_t5, sensity_t5, dist_t6, sensity_t6;// define variables   
+bool SOFT = false; //define block
+bool detect = false; //define when we need detection
+
+float ultrasensor_reading(){ // read the value from the sensor:
+sensity_t1 = analogRead(sensityPin);
+dist_t1 = sensity_t1 * MAX_RANG / ADC_SOLUTION; //measure values for 6 times
+delay(10);
+sensity_t2 = analogRead(sensityPin);
+dist_t2 = sensity_t2 * MAX_RANG / ADC_SOLUTION;//
+delay(10);
+sensity_t3 = analogRead(sensityPin);
+dist_t3 = sensity_t3 * MAX_RANG / ADC_SOLUTION;//
+delay(10);
+sensity_t4 = analogRead(sensityPin);
+dist_t4 = sensity_t4 * MAX_RANG / ADC_SOLUTION;//
+delay(10);
+sensity_t5 = analogRead(sensityPin);
+dist_t5 = sensity_t5 * MAX_RANG / ADC_SOLUTION;//
+delay(10);
+sensity_t6 = analogRead(sensityPin);
+dist_t6 = sensity_t6 * MAX_RANG / ADC_SOLUTION;//
+delay(10);
+
+dist_t = (dist_t1+dist_t2+dist_t3+dist_t4+dist_t5+dist_t6)/3; //average values to get one number for detection
+Serial.println(dist_t);
+
+dist_t = distance;
+return distance; //return detection sensor value
+}
+
+void ultrasensor(float distance) { //sensing function is here
+if(1<distance && distance< 7)  //by trial and error, 7 is the optimal value of transition to detect blocks
+  {
+    Serial.println("hard");    //low value gives metal block, denser block
+    Serial.println(distance);
+    SOFT = false;
+    digitalWrite(led_red, HIGH); //Turn on led_red
+    delay(500);
+  }
+else {
+  Serial.println("SOFT");     //any other value is foam, less dense
+  Serial.println(distance);
+  SOFT = true;
+  digitalWrite(led_green, HIGH); //Turn on led_green
+  delay(500);
+}
+Serial.print("sense");  //show that it succeed sensing
+delay(3000);
+}

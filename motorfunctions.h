@@ -1,48 +1,44 @@
 #include <Adafruit_MotorShield.h>
 #include <Servo.h>
-#define MAX_RANG (520)//the max measurement value of the module is 520cm(a little bit longerthan effective max range)
-#define ADC_SOLUTION (1023.0)//ADC accuracy of Arduino UNO is 10bit
+Servo myservo; 
 
-Servo myservo;
-
-bool linetrack = false;
-int sensityPin = A0; // select the input pin
-float dist_t1;
-float sensity_t1; 
-float dist_t3;
-float sensity_t3, dist_t2, sensity_t2, dist_t ;// define variables
-float dist_t4;
-float sensity_t4;
-float dist_t5;
-float sensity_t5;
-float dist_t6;
-float sensity_t6;   
-bool Soft = false; //define block
-int ServoPin = 10;
+int ServoPin = 4;
 int pos = 0; // variable to store the servo position
 int sl=6;   //sensor left
 int sr=7;  //sensor right
 int ssr=8;   //outer sensor right
 int ssl=9;   //outer sensor left
+int led_red = 10;    //light sensors
+int led_green = 11;
+int led_blue = 12;
 int svr=0; //sensor value right
 int svl=0; //sensor value left
 int svvr=0; //outer sensor value right
 int svvl=0; //outer sensor value left
-int servoangle = 110; //angle it turns to grab the block
-int tdelay=2; 
-int buttonPin = 4;
-int led=13;
-int motorspeed=150; //0-255  
+int servoangle = 90; //angle it turns to grab the block
+int tdelay=10; 
+
 
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 // Select which 'port' M1, M2, M3 or M4. In this case, M1
-Adafruit_DCMotor *LeftMotor = AFMS.getMotor(4);
-Adafruit_DCMotor *RightMotor = AFMS.getMotor(1);
-Adafruit_DCMotor *LiftMotor = AFMS.getMotor(3);
+Adafruit_DCMotor *LeftMotor = AFMS.getMotor(3);
+Adafruit_DCMotor *RightMotor = AFMS.getMotor(4);
+Adafruit_DCMotor *LiftMotor = AFMS.getMotor(1);
 
+void pininitialise() {    //output for led lights
+    pinMode(led_red, OUTPUT); 
+    pinMode(led_green, OUTPUT); 
+    pinMode(led_blue, OUTPUT); 
+}
+void blue_led_flashing(){    //function to turn blue led on during motion
+  digitalWrite(led_blue, LOW); //Turn on led_blue
+  delay(100);
+  digitalWrite(led_blue, HIGH); //Turn off led_blue
+  delay(100);
 
-void forward()
+}
+void forward()        //forward function
  {
   //adjust the speed here if needed
   LeftMotor->setSpeed(255);
@@ -54,8 +50,10 @@ void forward()
  } 
 
 
-void backward()
+void backward()        //backwards function
    {
+    LeftMotor->setSpeed(225);
+    RightMotor->setSpeed(225);
     LeftMotor->run(BACKWARD);
     RightMotor->run(BACKWARD);
     Serial.println("BACKWARD");
@@ -63,22 +61,22 @@ void backward()
    }
 
 
-void right() 
+void right()     //slight right for linetracking, by one motor faster than the other
  {
   LeftMotor->setSpeed(255);
   LeftMotor->run(FORWARD);
-  RightMotor->setSpeed(25);
+  RightMotor->setSpeed(100);
   RightMotor->run(FORWARD);
   Serial.println("RIGHT");
   delay(tdelay);
   }
 
 
-void left() 
+void left()     //slight left for linetracking, by one motor faster than the other
  {
-  RightMotor->setSpeed(225);
+  RightMotor->setSpeed(255);
   RightMotor->run(FORWARD);
-  LeftMotor->setSpeed(25);
+  LeftMotor->setSpeed(100);
   LeftMotor->run(FORWARD);
   Serial.println("LEFT");
   delay(tdelay); 
@@ -122,31 +120,7 @@ void left90() //turn 90 degrees
   RightMotor->run(FORWARD);
   svr=digitalRead(sr);
  }
-  //delay(1000);
   }
-
-
-void backright() 
- {
-  LeftMotor->setSpeed(155);
-  LeftMotor->run(BACKWARD);
-  RightMotor->setSpeed(100);
-  RightMotor->run(BACKWARD);
-  Serial.println("BACKRIGHT");
-  delay(tdelay);
-  }
-
-
-void backleft() 
- {
-  RightMotor->setSpeed(155);
-  RightMotor->run(BACKWARD);
-  LeftMotor->setSpeed(100);
-  LeftMotor->run(BACKWARD);
-  Serial.println("BACKLEFT");
-  delay(tdelay); 
-}  
-
 
 void stop()
  {
@@ -154,102 +128,62 @@ void stop()
   RightMotor->run(RELEASE);
  }
 
-void grab()
+void grab()        //close crawls
 {
-   for (pos = 0; pos <= servoangle; pos += 1) { // goes from 0 degrees to 180 degrees
+   for (pos = 20; pos <= servoangle; pos += 1) { // goes from 0 degrees to 180 degrees
   // in steps of 1 degree
   myservo.write(pos); // tell servo to go to position in variable 'pos'
-  delay(15); // waits 15 ms for the servo to reach the position
+  delay(30); // waits 15 ms for the servo to reach the position
   }
 }
 
 
-void lift()
+void lift()        //lift crawls
 {
-  LiftMotor->setSpeed(50);
+  LiftMotor->setSpeed(250);
   LiftMotor->run(FORWARD);
   Serial.println("LIFT");
-  delay(tdelay);
+  delay(500);
+  LiftMotor->run(RELEASE);
 }
 
 
-void puttingdown()
+void puttingdown()     //put crawls down
 {
-  LiftMotor->setSpeed(50);
+  LiftMotor->setSpeed(150);
   LiftMotor->run(BACKWARD);
+  digitalWrite(led_red, LOW); 
+  digitalWrite(led_green, LOW); 
   Serial.println("PUTTINGDOWN");
-  delay(tdelay);
+  delay(500);
+  LiftMotor->run(RELEASE);
 }
 
-
-
-void release()
+void release()        //open crawls
 {
-  myservo.write(0); // tell servo to release to 0 degrees
+  myservo.write(20); // tell servo to release to 0 degrees
   }
   
-
-void backwardlinetracking()
-{
+//LINETRACKING FUNCTIONS
+void linetracking(){
+  blue_led_flashing();
  svl=digitalRead(sl);
  svr=digitalRead(sr);
  svvr=digitalRead(ssr);
- svvl=digitalRead(ssl); 
-  if(svl==HIGH && svr==HIGH)
+ svvl=digitalRead(ssl);
+   
+  if(svl==HIGH   && svr==LOW)
   {
-  backward();
+  left(); 
   }
-  else if(svl==HIGH   && svr==LOW)
-  {
-  backleft(); 
-  }
+
   else if(svl==LOW && svr==HIGH)
    { 
-  backright(); 
+  right(); 
   }
-  else if(svl==LOW && svr==LOW)
+
+  else if(svl==HIGH && svr==HIGH)
    {
-  // backward();
+  forward();
   }
-}
-
-float ultrasensor_reading(){
-   // read the value from the sensor:
-sensity_t1 = analogRead(sensityPin);
-dist_t1 = sensity_t1 * MAX_RANG / ADC_SOLUTION;//
-delay(10);
-sensity_t2 = analogRead(sensityPin);
-dist_t2 = sensity_t2 * MAX_RANG / ADC_SOLUTION;//
-delay(10);
-sensity_t3 = analogRead(sensityPin);
-dist_t3 = sensity_t3 * MAX_RANG / ADC_SOLUTION;//
-delay(10);
-sensity_t4 = analogRead(sensityPin);
-dist_t4 = sensity_t4 * MAX_RANG / ADC_SOLUTION;//
-delay(10);
-sensity_t5 = analogRead(sensityPin);
-dist_t5 = sensity_t5 * MAX_RANG / ADC_SOLUTION;//
-delay(10);
-sensity_t6 = analogRead(sensityPin);
-dist_t6 = sensity_t6 * MAX_RANG / ADC_SOLUTION;//
-delay(10);
-
-dist_t = (dist_t1+dist_t2+dist_t3+dist_t4+dist_t5+dist_t6)/3;
-Serial.println(dist_t);
-return dist_t;
-}
-
-void ultrasensor(float distance) {
-if(1<distance && distance< 5.5)
-  {
-    Serial.println("hard");
-    Serial.println(distance);
-    Soft = false;
-    //counter ++; //metal block detect so go to green 
-    delay(500);
-  }
-else {
-  Serial.println("soft");
-  Serial.println(distance);
-}
 }
