@@ -2,11 +2,7 @@ int counter = 0;
 //count the numbers of turn  //Remember to change back counter to 0, uncomment initialise, soft=false
 int i =0;
 
-
-void counterfunction(){
-Serial.println(counter);
-if (counter == 0)
-{
+void left90(){     //turn 90degrees to left
   Serial.println("LEFT90");
   forward();
   delay(500);
@@ -21,11 +17,9 @@ if (counter == 0)
     RightMotor->run(FORWARD);
     svr=digitalRead(sr);
   }
-  counter++; 
-  }
-  
-else if (counter == 1)   //Moving into the junction
-{
+}
+
+void right90(){
   Serial.println("RIGHT90"); 
   forward();
   delay(500);
@@ -40,7 +34,51 @@ else if (counter == 1)   //Moving into the junction
     RightMotor->run(BACKWARD);
     svl=digitalRead(sl);
  }
+}
+
+void hardleft90(){
+  Serial.println("LEFT90");    //TURN LEFT to the way back to the zone if SOFT
+        RightMotor->setSpeed(200);
+        LeftMotor->setSpeed(0);
+        LeftMotor->run(FORWARD);
+        RightMotor->run(FORWARD);
+        delay(2000);
+        while(svr==LOW){
+            Serial.println("INSIDEWHILELOOP");
+            LeftMotor->run(BACKWARD);
+            RightMotor->run(FORWARD);
+            svr=digitalRead(sr);
+        }
+}
+
+void hardright90(){
+   Serial.println("RIGHT90"); 
+    RightMotor->setSpeed(0);
+    LeftMotor->setSpeed(200);
     LeftMotor->run(FORWARD);
+    RightMotor->run(FORWARD);
+    delay(2000);
+    while(svl==LOW){
+        Serial.println("INSIDEWHILELOOP");
+        LeftMotor->run(FORWARD);
+        RightMotor->run(BACKWARD);
+        svl=digitalRead(sl);
+     }
+}
+
+void counterfunction(){
+Serial.println(counter);
+if (counter == 0)
+{
+ left90();
+  }
+  counter++; 
+  }
+  
+else if (counter == 1)   //Moving into the junction
+{
+  right90();
+    LeftMotor->run(FORWARD);  //turn a bit move to face forward
     RightMotor->run(BACKWARD);
     delay(100);
     release();
@@ -67,33 +105,11 @@ else if (counter == 2) //Sensing and detecting the block
     }
     backward();
     delay(500);
-    if (SOFT == true) {
-        Serial.println("LEFT90");    //TURN LEFT to the way back to the zone if SOFT
-        RightMotor->setSpeed(200);
-        LeftMotor->setSpeed(0);
-        LeftMotor->run(FORWARD);
-        RightMotor->run(FORWARD);
-        delay(2000);
-        while(svr==LOW){
-            Serial.println("INSIDEWHILELOOP");
-            LeftMotor->run(BACKWARD);
-            RightMotor->run(FORWARD);
-            svr=digitalRead(sr);
-        }
+    if (SOFT == true) {    //TURN LEFT to the way back to the zone if SOFT
+        hardleft90();
       }
     else {                        //Turn RIGHT to the way back to the zone if HARD
-    Serial.println("RIGHT90"); 
-    RightMotor->setSpeed(0);
-    LeftMotor->setSpeed(200);
-    LeftMotor->run(FORWARD);
-    RightMotor->run(FORWARD);
-    delay(2000);
-    while(svl==LOW){
-        Serial.println("INSIDEWHILELOOP");
-        LeftMotor->run(FORWARD);
-        RightMotor->run(BACKWARD);
-        svl=digitalRead(sl);
-     }
+   hardright90();
     }
     counter++;
     }
@@ -103,40 +119,12 @@ else if (counter == 3) //moving into junction of the putting zone
 {
 if (SOFT == true) 
 {
-Serial.println("LEFT90");    //TURN LEFT to the way back to the zone if SOFT
-forward();
-delay(500);
-RightMotor->setSpeed(150);
-LeftMotor->setSpeed(150);
-LeftMotor->run(BACKWARD);
-RightMotor->run(FORWARD);
-delay(1500);
-while(svr==LOW)
-{
-Serial.println("INSIDEWHILELOOP");
-LeftMotor->run(BACKWARD);
-RightMotor->run(FORWARD);
-svr=digitalRead(sr);
-}
+left90();
 }
 
 else 
 {                    //TURN RIGHT to the way back to the zone if HARD
-Serial.println("RIGHT90"); 
-forward();
-delay(500);
-RightMotor->setSpeed(150);
-LeftMotor->setSpeed(150);
-LeftMotor->run(FORWARD);
-RightMotor->run(BACKWARD);
-delay(1500);
-while(svl==LOW)
-{
-Serial.println("INSIDEWHILELOOP");
-LeftMotor->run(FORWARD);
-RightMotor->run(BACKWARD);
-svl=digitalRead(sl);
-}
+right90();
 }
 counter++;
 }
@@ -193,36 +181,10 @@ else if (counter==4)    //Putting the block and linetracking until the second li
       }
     }
 if (SOFT == false) {
-        Serial.println("LEFT90");    //TURN LEFT to the way back to the zone if HARD
-        backward();
-        delay(1000);
-        RightMotor->setSpeed(200);
-        LeftMotor->setSpeed(0);
-        LeftMotor->run(FORWARD);
-        RightMotor->run(FORWARD);
-        delay(2500);
-        while(svr==LOW){
-            Serial.println("INSIDEWHILELOOP");
-            LeftMotor->run(BACKWARD);
-            RightMotor->run(FORWARD);
-            svr=digitalRead(sr);
-        }
+        hardleft90();      //turn left
       }
 else {                        //Turn RIGHT to the way back to the zone if SOFT
-    Serial.println("RIGHT90"); 
-    backward();
-    delay(1000);
-    RightMotor->setSpeed(0);
-    LeftMotor->setSpeed(200);
-    LeftMotor->run(FORWARD);
-    RightMotor->run(FORWARD);
-    delay(2500);
-    while(svl==LOW){
-        Serial.println("INSIDEWHILELOOP");
-        LeftMotor->run(FORWARD);
-        RightMotor->run(BACKWARD);
-        svl=digitalRead(sl);
-     }
+   hardright90();
     }
   counter++;
   }
@@ -231,40 +193,14 @@ else {                        //Turn RIGHT to the way back to the zone if SOFT
   else if (counter == 5)
   {
   if (SOFT == true) {       //Turn Right into the second block junction if SOFT
-  Serial.println("RIGHT90"); 
-  forward();
-  delay(500);
-  RightMotor->setSpeed(150);
-  LeftMotor->setSpeed(150);
-  LeftMotor->run(FORWARD);
-  RightMotor->run(BACKWARD);
-  delay(1500);
-  while(svl==LOW){
-    Serial.println("INSIDEWHILELOOP");
-    LeftMotor->run(FORWARD);
-    RightMotor->run(BACKWARD);
-    svl=digitalRead(sl);
- }
+ right90();
     LeftMotor->run(FORWARD);
     RightMotor->run(BACKWARD);
     delay(100);
   
     }
     else {                //Turn Left into the second block junction if HARD
-  Serial.println("LEFT90");
-  forward();             
-  delay(500);
-  RightMotor->setSpeed(150);
-  LeftMotor->setSpeed(150);
-  LeftMotor->run(BACKWARD);
-  RightMotor->run(FORWARD);
-  delay(1500);
-  while(svr==LOW){
-  Serial.println("INSIDEWHILELOOP");
-  LeftMotor->run(BACKWARD);
-  RightMotor->run(FORWARD);
-  svr=digitalRead(sr);
- }
+  left90();
     LeftMotor->run(BACKWARD);
     RightMotor->run(FORWARD);
     delay(100);
@@ -294,32 +230,10 @@ else {                        //Turn RIGHT to the way back to the zone if SOFT
     delay(300);
  
     if (SOFT == false) {
-        Serial.println("LEFT90");    //TURN LEFT to the way back to the zone if SOFT
-        RightMotor->setSpeed(200);
-        LeftMotor->setSpeed(0);
-        LeftMotor->run(FORWARD);
-        RightMotor->run(FORWARD);
-        delay(2000);
-        while(svr==LOW){
-            Serial.println("INSIDEWHILELOOP");
-            LeftMotor->run(BACKWARD);
-            RightMotor->run(FORWARD);
-            svr=digitalRead(sr);
-        }
+        hardleft90();
       }
     else {                        //Turn RIGHT to the way back to the zone if HARD
-    Serial.println("RIGHT90"); 
-    RightMotor->setSpeed(0);
-    LeftMotor->setSpeed(200);
-    LeftMotor->run(FORWARD);
-    RightMotor->run(FORWARD);
-    delay(2000);
-    while(svl==LOW){
-        Serial.println("INSIDEWHILELOOP");
-        LeftMotor->run(FORWARD);
-        RightMotor->run(BACKWARD);
-        svl=digitalRead(sl);
-     }
+  hardright90();
     }
   counter++;
   }
@@ -328,37 +242,11 @@ else {                        //Turn RIGHT to the way back to the zone if SOFT
   else if (counter == 7)   //Turning to the way back to the putting zone for the second block
   {
   if (SOFT == true) {
-  Serial.println("LEFT90");
-  forward();
-  delay(300);
-  RightMotor->setSpeed(150);
-  LeftMotor->setSpeed(150);
-  LeftMotor->run(BACKWARD);
-  RightMotor->run(FORWARD);
-  delay(1000);
-  while(svr==LOW){
-    Serial.println("INSIDEWHILELOOP");
-    LeftMotor->run(BACKWARD);
-    RightMotor->run(FORWARD);
-    svr=digitalRead(sr);
-  }
+  left90();
     }
 
   else {                        
-  Serial.println("RIGHT90");
-  forward();
-  delay(300);
-  RightMotor->setSpeed(150);
-  LeftMotor->setSpeed(150);
-  LeftMotor->run(FORWARD);
-  RightMotor->run(BACKWARD);
-  delay(1000);
-  while(svl==LOW){
-    Serial.println("INSIDEWHILELOOP");
-    LeftMotor->run(FORWARD);
-    RightMotor->run(BACKWARD);
-    svl=digitalRead(sl);
-  }
+  right90();
     }
   counter++;
   }
@@ -374,32 +262,10 @@ else {                        //Turn RIGHT to the way back to the zone if SOFT
   backward();
   delay(1000);
   if (SOFT==true){
-    RightMotor->setSpeed(150);
-    LeftMotor->setSpeed(150);
-    LeftMotor->run(BACKWARD);
-    RightMotor->run(FORWARD);
-    delay(1500);
-    svr=digitalRead(sr);
-    while(svr==LOW){
-    Serial.println("TURN180");
-    LeftMotor->run(BACKWARD);
-    RightMotor->run(FORWARD);
-    svr=digitalRead(sr);
-    }
+   left90();
     }
     else{
-    RightMotor->setSpeed(150);
-    LeftMotor->setSpeed(150);
-    LeftMotor->run(FORWARD);
-    RightMotor->run(BACKWARD);
-    delay(1500);
-    svl=digitalRead(sl);
-    while(svl==LOW){
-    Serial.println("TURN180");
-    LeftMotor->run(FORWARD);
-    RightMotor->run(BACKWARD);
-    svl=digitalRead(sl);
-    }
+right90();
     }
     i=0;
   while(i<1){
@@ -414,38 +280,12 @@ else {                        //Turn RIGHT to the way back to the zone if SOFT
     }
   }
   
-  if (SOFT == false) { 
-      Serial.println("LEFT90");    //TURN LEFT to the way back to the zone if HARD
-      backward();
-      delay(1000);
-      RightMotor->setSpeed(200);
-      LeftMotor->setSpeed(0);
-      LeftMotor->run(FORWARD);
-      RightMotor->run(FORWARD);
-      delay(2500);
-      while(svr==LOW){
-          Serial.println("INSIDEWHILELOOP");
-          LeftMotor->run(BACKWARD);
-          RightMotor->run(FORWARD);
-          svr=digitalRead(sr);
-      }
+  if (SOFT == false) {   //TURN LEFT to the way back to the zone if HARD
+ hardleft90();
       }
   
   else {                        //Turn RIGHT to the way back to the zone if SOFT
-      Serial.println("RIGHT90"); 
-      backward();
-      delay(1000);
-      RightMotor->setSpeed(0);
-      LeftMotor->setSpeed(200);
-      LeftMotor->run(FORWARD);
-      RightMotor->run(FORWARD);
-      delay(2500);
-      while(svl==LOW){
-          Serial.println("INSIDEWHILELOOP");
-          LeftMotor->run(FORWARD);
-          RightMotor->run(BACKWARD);
-          svl=digitalRead(sl);
-      }
+      hardright90();
       }
     counter++;
   }
@@ -453,39 +293,13 @@ else {                        //Turn RIGHT to the way back to the zone if SOFT
 
 else if (counter == 9){   //Turning back to the end zone
  if (SOFT == true) {
-  Serial.println("RIGHT90"); 
-  forward();
-  delay(800);
-  RightMotor->setSpeed(150);
-  LeftMotor->setSpeed(150);
-  LeftMotor->run(FORWARD);
-  RightMotor->run(BACKWARD);
-  delay(1500);
-  while(svl==LOW){
-    Serial.println("INSIDEWHILELOOP");
-    LeftMotor->run(FORWARD);
-    RightMotor->run(BACKWARD);
-    svl=digitalRead(sl);
- }
+ right90();
     LeftMotor->run(FORWARD);
     RightMotor->run(BACKWARD);
     delay(100);
     }
 else {                        
-  Serial.println("LEFT90"); 
-  forward();
-  delay(800);
-  RightMotor->setSpeed(150);
-  LeftMotor->setSpeed(150);
-  LeftMotor->run(BACKWARD);
-  RightMotor->run(FORWARD);
-  delay(1500);
-  while(svr==LOW){
-    Serial.println("INSIDEWHILELOOP");
-    LeftMotor->run(BACKWARD);
-    RightMotor->run(FORWARD);
-    svr=digitalRead(sr);
- }
+  left90();
     LeftMotor->run(BACKWARD);
     RightMotor->run(FORWARD);
     delay(100);
