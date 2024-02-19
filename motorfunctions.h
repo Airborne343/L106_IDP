@@ -2,15 +2,15 @@
 #include <Servo.h>
 Servo myservo; 
 
-int ServoPin = 4;
+int ServoPin = 9;
 int pos = 0; // variable to store the servo position
-int sl=6;   //sensor left
-int sr=7;  //sensor right
-int ssr=8;   //outer sensor right
-int ssl=9;   //outer sensor left
-int led_red = 10;    //light sensors
-int led_green = 11;
-int led_blue = 12;
+int sl=5;   //sensor left
+int sr=6;  //sensor right
+int ssr=7;   //outer sensor right
+int ssl=8;   //outer sensor left
+int led_red = 2;    //light sensors
+int led_green = 3;
+int led_blue = 4;
 int svr=0; //sensor value right
 int svl=0; //sensor value left
 int svvr=0; //outer sensor value right
