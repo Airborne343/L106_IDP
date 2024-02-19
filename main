@@ -6,7 +6,7 @@
 #define ADC_SOLUTION (1023.0)//ADC accuracy of Arduino UNO is 10bit
 
 bool linetrack = false;
-int buttonPin = 5;
+int buttonPin = 10;
 int motorspeed=150; //0-255       
 int t = 0;  //time taken in the junction
 float sensity_t;
